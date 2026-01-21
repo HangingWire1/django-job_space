@@ -1,10 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Job Space</title>
-</head>
-<body>
-    <h1>welcome to job space</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home | JobBoard{% endblock %}
+
+{% block content %}
+<style>
+    .hero-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+
+    .hero-container h1 {
+        margin-bottom: 30px;
+        font-size: 2rem;
+        color: #333;
+    }
+
+    /* Multi-part Search Bar Container */
+    .search-group {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #333; /* Matches the wireframe outline */
+        width: 100%;
+        max-width: 900px;
+    }
+
+    /* Individual segments */
+    .search-input-field, .search-select, .search-btn {
+        padding: 15px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        height: 55px;
+        box-sizing: border-box;
+    }
+
+    /* Borders between segments */
+    .search-input-field, .search-select {
+        border-right: 1px solid #333;
+    }
+
+    /* Width proportions */
+    .search-input-field { flex: 2; } /* Keywords gets more space */
+    .search-select { flex: 1; background-color: white; cursor: pointer; }
+    .search-btn { 
+        flex: 0.8; 
+        background-color: #fff; 
+        cursor: pointer; 
+        text-decoration: underline; /* Matches the image text style */
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+
+    .search-btn:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Responsive: Stack on small screens */
+    @media (max-width: 768px) {
+        .search-group { flex-direction: column; border: none; }
+        .search-input-field, .search-select, .search-btn {
+            width: 100%;
+            border: 1px solid #333;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+
+<div class="hero-container">
+    <h1>Find your next opportunity</h1>
+
+    <form method="GET" action="/search/" class="search-group">
+        <input type="text" name="q" class="search-input-field" placeholder="keywords...">
+
+        <select name="category" class="search-select">
+            <option value="" disabled selected>Categories</option>
+            <option value="tech">Technology</option>
+            <option value="design">Design</option>
+            <option value="marketing">Marketing</option>
+            <option value="sales">Sales</option>
+        </select>
+
+        <select name="location" class="search-select">
+            <option value="" disabled selected>Location</option>
+            <option value="ny">New York</option>
+            <option value="ca">California</option>
+            <option value="tx">Texas</option>
+            <option value="fl">Florida</option>
+        </select>
+
+        <button type="submit" class="search-btn">search</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Job Portal{% endblock %}</title>
+    <style>
+        /* Basic Reset & Layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #2d3436;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00cec9;
+        }
+
+        .employer-link {
+            background-color: #00cec9;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: #2d3436 !important;
+        }
+
+        /* Content Area */
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #f1f2f6;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #dfe6e9;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <a href="/" style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;">JobBoard</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/profile/">Profile</a></li>
+            <li><a href="/applications/">Applications</a></li>
+            <li><a href="/login/">Login</a></li>
+            <li><a href="/register/">Register</a></li>
+            <li><a href="/employer/" class="employer-link">Switch to Employer</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 JobBoard Inc. All rights reserved.</p>
+        <small><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></small>
+    </footer>
+
+</body>
+</html>
