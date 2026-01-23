@@ -1,5 +1,6 @@
-{% extends "base.html" %}
 
+{% extends "base.html" %}
+{% load static %}
 {% block title %}Home | JobBoard{% endblock %}
 
 {% block content %}
@@ -72,6 +73,7 @@
     }
 </style>
 
+
 <div class="hero-container">
     <h1>Find your next opportunity</h1>
 
@@ -79,22 +81,33 @@
         <input type="text" name="q" class="search-input-field" placeholder="keywords...">
 
         <select name="category" class="search-select">
-            <option value="" disabled selected>Categories</option>
-            <option value="tech">Technology</option>
-            <option value="design">Design</option>
-            <option value="marketing">Marketing</option>
-            <option value="sales">Sales</option>
+            <option value="" disabled selected>Select Category</option>
+            {% for cat in categories %}
+            <option value="">{{ cat.name }}</option>
+            {% endfor %}
         </select>
 
-        <select name="location" class="search-select">
-            <option value="" disabled selected>Location</option>
-            <option value="ny">New York</option>
-            <option value="ca">California</option>
-            <option value="tx">Texas</option>
-            <option value="fl">Florida</option>
+        <select name="state" id="id_state" class="search-select">
+            <option value="" disabled selected>Select State</option>
+            {% for state in states %}
+            <option value="{{ state.id }}">{{ state.name }}</option>
+            {% endfor %}
         </select>
+
+        <select name="location" id="id_township" class="search-select">
+            <option value="" disabled selected>Choose Township</option>
+        </select>
+
+
 
         <button type="submit" class="search-btn">search</button>
     </form>
 </div>
+
+<!--show related townships with state-->
+<script src="{% static 'js/dropdowns.js' %}"></script>
+<script>
+    initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+</script>
 {% endblock %}
+
