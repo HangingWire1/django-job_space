@@ -5,10 +5,4 @@ from job_posts.models import Category
 
 
 def home(request):
-    states = State.objects.all().order_by('name')
-    categories = Category.objects.all().order_by('name')
-    context = {
-        'states': states,
-        'categories': categories
-    }
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')

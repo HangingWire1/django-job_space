@@ -1,1 +1,102 @@
-<h1>i am job lists</h1>
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Compact header for the results page */
+    .search-header-container {
+        padding: 30px 20px;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .results-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .job-card {
+        border: 1px solid #eee;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        background: white;
+    }
+
+    /* 1. Make sure the card is the "anchor" for the stretch */
+.job-card {
+    position: relative; /* This is the boundary for the link */
+    border: 1px solid #ddd;
+    padding: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 2. The magic trick */
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: ""; /* This creates an invisible layer over the whole card */
+}
+
+/* 3. Give user feedback so they KNOW it's a button */
+.job-card:hover {
+    background-color: #f8f9fa;
+    border-color: #333;
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+    /* 1. Remove the default blue color and underline */
+.job-card h3 a {
+    text-decoration: none; /* Removes the underline */
+    color: inherit;        /* Makes the link the same color as the surrounding text (#333) */
+    display: block;        /* Ensures the link area is solid */
+}
+
+</style>
+
+<div class="search-header-container">
+    {% include "includes/search_form.html" %}
+</div>
+
+<div class="results-container">
+    <h2>Search Results ({{ jobs.count }})</h2>
+
+    {% for job in jobs %}
+    <div class="job-card">
+        <div>
+            <h3>
+                <a href="{% url 'job_details' job.slug %}" class="stretched-link">
+                    {{ job.title }}
+                </a>
+            </h3>
+            <p>{{ job.employer.company_name }} | {{ job.location.state.name }}</p>
+            <small>Posted: {{ job.created_at|timesince }} ago</small>
+        </div>
+        <div style="text-align: right;">
+            <p style="color: green; font-weight: bold;">salary: {{ job.salary }}</p>
+            <span class="job-badge">{{ job.job_type }}</span>
+        </div>
+    </div>
+    {% empty %}
+    <div style="text-align: center; padding: 50px;">
+        <p>No jobs found for your search. Try different keywords.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="{% static 'js/dropdowns.js' %}"></script>
+<script>
+    initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+</script>
+{% endblock %}
+

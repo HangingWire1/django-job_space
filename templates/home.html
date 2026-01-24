@@ -21,15 +21,6 @@
         color: #333;
     }
 
-    /* Multi-part Search Bar Container */
-    .search-group {
-        display: flex;
-        align-items: center;
-        background: white;
-        border: 1px solid #333; /* Matches the wireframe outline */
-        width: 100%;
-        max-width: 900px;
-    }
 
     /* Individual segments */
     .search-input-field, .search-select, .search-btn {
@@ -77,31 +68,8 @@
 <div class="hero-container">
     <h1>Find your next opportunity</h1>
 
-    <form method="GET" action="/search/" class="search-group">
-        <input type="text" name="q" class="search-input-field" placeholder="keywords...">
-
-        <select name="category" class="search-select">
-            <option value="" disabled selected>Select Category</option>
-            {% for cat in categories %}
-            <option value="">{{ cat.name }}</option>
-            {% endfor %}
-        </select>
-
-        <select name="state" id="id_state" class="search-select">
-            <option value="" disabled selected>Select State</option>
-            {% for state in states %}
-            <option value="{{ state.id }}">{{ state.name }}</option>
-            {% endfor %}
-        </select>
-
-        <select name="location" id="id_township" class="search-select">
-            <option value="" disabled selected>Choose Township</option>
-        </select>
-
-
-
-        <button type="submit" class="search-btn">search</button>
-    </form>
+<!--    search form-->
+    {% include "includes/search_form.html" %}
 </div>
 
 <!--show related townships with state-->

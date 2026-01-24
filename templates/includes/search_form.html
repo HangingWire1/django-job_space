@@ -1,0 +1,23 @@
+<form method="GET" action="{% url 'search_jobs' %}" class="search-group">
+        <input type="text" name="q" class="search-input-field" placeholder="keywords...">
+
+        <select name="category" class="search-select">
+            <option value="" disabled selected>Select Category</option>
+            {% for cat in categories %}
+            <option value="">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="state" id="id_state" class="search-select">
+            <option value="" disabled selected>Select State</option>
+            {% for state in states %}
+            <option value="{{ state.id }}">{{ state.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="township" id="id_township" class="search-select">
+            <option value="" disabled selected>Choose Township</option>
+        </select>
+
+        <button type="submit" class="search-btn">search</button>
+    </form>
