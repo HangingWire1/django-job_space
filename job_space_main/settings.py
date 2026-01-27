@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication',
     'job_posts',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'job_space_main.context_processors.job_search_data',
+                'authentication.context_processors.role_context',
             ],
         },
     },
@@ -122,8 +125,14 @@ AUTH_USER_MODEL = 'authentication.User'
 
 # 1. This is the URL used to access static files in the browser (e.g., /static/js/...)
 STATIC_URL = 'static/'
-
 # 2. Add this to tell Django to look in your root "static" folder
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Crispy Forms Settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

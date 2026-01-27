@@ -84,7 +84,7 @@
     <div class="header-section">
         <h1>{{ job.title }}</h1>
         <p>
-            Posted {{ job.uploaded_date|timesince }} by
+            Posted: {{ job.created_at|timesince }} ago by
             <a href="" class="employer-link">
                 {{ job.employer.user.username }}
             </a>

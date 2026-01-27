@@ -21,6 +21,7 @@ from job_space_main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
+    path('active_page/',views.active_page,name='active_page'),
     path('job_posts/',include('job_posts.urls')),
-    # path('authentication/',include('authentication.urls')),
+    path('authentication/',include('authentication.urls')),
 ]

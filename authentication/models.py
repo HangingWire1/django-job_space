@@ -1,13 +1,17 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     is_employer = models.BooleanField(default=False)
     is_employee = models.BooleanField(default=False)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
     def __str__(self):
-        return self.username
+        return self.email
 
 class State(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -35,6 +39,7 @@ class Location(models.Model):
         return f"{self.detail_address}, {self.township.name}, {self.state.name}"
 
 class Employer(models.Model):
+    is_active = models.BooleanField(default=True)
     # Choice class for number of employees
     class EmployeeRange(models.TextChoices):
         RANGE_1_5 = '1-5', '1-5'
@@ -54,11 +59,12 @@ class Employer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='employer_profile'
+        related_name='employer_profile',
+        limit_choices_to = {'is_employer': True}
     )
     profile_photo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
-    company_name = models.CharField(max_length=255)
-    industry = models.CharField(max_length=100)
+    company_name = models.CharField(max_length=255,null=True, blank=True)
+    industry = models.CharField(max_length=100,null=True, blank=True)
 
     no_of_employee = models.CharField(
         max_length=20,
@@ -66,22 +72,80 @@ class Employer(models.Model):
         default=EmployeeRange.RANGE_1_5
     )
 
-    founded_at = models.DateField()
+    founded_at = models.DateField(null=True, blank=True)
 
     # 2. Location (Assuming you have a Location model elsewhere)
-    location = models.ForeignKey(
+    location = models.OneToOneField(
         'Location',
         on_delete=models.SET_NULL,
-        null=True
+        null=True, blank=True
     )
 
     # 3. Rich Text/Description Fields
-    what_we_do = models.TextField()
-    why_join_us = models.TextField()
-    mission_vision = models.TextField()
+    what_we_do = models.TextField(null=True, blank=True)
+    why_join_us = models.TextField(null=True, blank=True)
+    mission_vision = models.TextField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def clean(self):
+        # Prevent saving if the linked user isn't marked as an employer
+        if self.user and not getattr(self.user, 'is_employer', False):
+            raise ValidationError("The selected user must have is_employer=True.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Ensures clean() is called before saving
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.company_name
+        return self.user.email
+
+class Employee(models.Model):
+    # Linking to the built-in User model
+    is_active = models.BooleanField(default=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='employee_profile',  # Access via user.employee_profile
+        limit_choices_to={'is_employee': True}
+    )
+
+    employee_name = models.CharField(
+        max_length=100, blank=True, null=True
+    )
+
+    # Basic Contact
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=20,null=True, blank=True)
+
+    # Location
+    state = models.OneToOneField(State, on_delete=models.SET_NULL, null=True, blank=True)
+    Township = models.OneToOneField(Township, on_delete=models.SET_NULL, null=True, blank=True)
+
+    # Files
+    profile_pic = models.ImageField(upload_to='employee/profiles/pics/', null=True, blank=True)
+    cv_file = models.FileField(upload_to='employee/profiles/cvs/', null=True, blank=True)
+
+    # Career Info
+    salary_expect = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    # Complex Data (JSON)
+    # Note: Requires a database like PostgreSQL for full functionality,
+    # but works as text in SQLite.
+    experience = models.JSONField(default=list, blank=True)
+    education = models.JSONField(default=list, blank=True)
+    skills = models.JSONField(default=list, blank=True)
+    social_media = models.JSONField(default=dict, blank=True)
+
+    def clean(self):
+        # Prevent saving if the linked user isn't marked as an employee
+        if self.user and not getattr(self.user, 'is_employee', False):
+            raise ValidationError("The selected user must have is_employee=True.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Ensures clean() is called before saving
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user.email

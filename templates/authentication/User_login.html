@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 shadow p-4 rounded bg-white">
+
+            {% if active_page == 'employee' %}
+            <h2 class="text-center">Login As Employee</h2>
+            {% elif active_page == 'employer' %}
+            <h2 class="text-center">Login As Employer</h2>
+            {% else %}
+            <h2 class="text-center">Login As Employee</h2>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form|crispy }}
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+            </form>
+
+            <p class="mt-3 text-center">
+                Don't have an account? <a href="{% url 'user_registration' %}">Register here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
