@@ -64,7 +64,7 @@
     }
 </style>
 
-
+{% if active_page == 'employee' %}
 <div class="hero-container">
     <h1>Find your next opportunity</h1>
 
@@ -73,9 +73,13 @@
 </div>
 
 <!--show related townships with state-->
-<script src="{% static 'js/dropdowns.js' %}"></script>
-<script>
-    initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
-</script>
+
+
+{% else %}
+<div class="hero-container">
+    <h1>Make Hiring Easier</h1>
+</div>
+{% endif %}
+
 {% endblock %}
 

@@ -70,6 +70,20 @@
 <!--        max-width: 900px;-->
 <!--    }-->
 
+        .avatar {
+    /* Set a specific size */
+    width: 150px;
+    height: 150px;
+
+    /* Ensure it stays a perfect circle */
+    object-fit: cover;
+    border-radius: 50%;
+
+    /* Optional: Add a nice border */
+    border: 3px solid #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
         /* Footer */
         footer {
             background-color: #f1f2f6;
@@ -81,32 +95,51 @@
 
 </head>
 <body>
-
     <nav>
+        {% if active_page == 'employee' %}
         <div class="logo">
-            <a href="/" style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;">JobBoard</a>
+            <a href="/" style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;">JobBoard {{user.employee.employee_name}}</a>
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/profile/">Profile</a></li>
+            <li><a href="{% url 'edit_employee_profile' %}">Profile</a></li>
             <li><a href="/applications/">Applications</a></li>
             <li><a href="{% url 'user_login' %}">Login</a></li>
             <li><a href="{% url 'user_registration' %}">Register</a></li>
+            <li><a href="{% url 'user_logout' %}">Logout</a></li>
 
             <li>
                 <form action="{% url 'active_page' %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn-link-style">
-                        {% if active_page == 'employee' %}
                             Switch to Employer
-                        {% else %}
-                            Switch to Employee
-                        {% endif %}
                     </button>
                 </form>
             </li>
-
         </ul>
+        {% else %}
+        <div class="logo">
+            <a href="/" style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;">JobBoard</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url 'edit_employer_profile' %}">Profile</a></li>
+            <li><a href="/posts/">My posts</a></li>
+            <li><a href="/applicants/">Applicants</a></li>
+            <li><a href="{% url 'user_login' %}">Login</a></li>
+            <li><a href="{% url 'user_registration' %}">Register</a></li>
+            <li><a href="{% url 'user_logout' %}">Logout</a></li>
+
+            <li>
+                <form action="{% url 'active_page' %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-link-style">
+                            Switch to Employee
+                    </button>
+                </form>
+            </li>
+        </ul>
+        {% endif %}
     </nav>
 
     <main>
@@ -118,5 +151,11 @@
         <p>&copy; 2026 JobBoard Inc. All rights reserved.</p>
         <small><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></small>
     </footer>
+
+    <script src="{% static 'js/dropdowns.js' %}"></script>
+    <script>
+        initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+    </script>
+
 </body>
 </html>

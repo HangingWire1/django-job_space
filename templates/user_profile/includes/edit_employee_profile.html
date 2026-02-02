@@ -1,0 +1,114 @@
+        <!-- Safely embed current JSON data for hydration -->
+        {{ experience_json|json_script:"experience-data" }}
+        {{ education_json|json_script:"education-data" }}
+        {{ skills_json|json_script:"skills-data" }}
+        {{ social_json|json_script:"social-data" }}
+
+        <form id="employee-form" method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          <div class="card p-3 mb-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full name</label>
+                {{ form.employee_name }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Contact email</label>
+                {{ form.email }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                {{ form.phone }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Expected salary</label>
+                {{ form.salary_expect }}
+              </div>
+
+              <div class="col-md-6" >
+                <label class="form-label">State</label>
+                {{ form.state }}
+              </div>
+              <div class="col-md-6" >
+                <label class="form-label">Township</label>
+                {{ form.township }}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Profile picture</label>
+                {{ form.profile_pic }}
+                {% if employee.profile_pic %}
+                  <div class="mt-2">
+                    <img src="{{ employee.profile_pic.url }}" alt="profile" style="max-height:120px; border-radius:6px;">
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">CV / Resume</label>
+                {{ form.cv_file }}
+                {% if employee.cv_file %}
+                  <div class="small-muted mt-2">
+                    Current file: <a href="{{ employee.cv_file.url }}" target="_blank">Download</a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- EXPERIENCE -->
+          <div class="card card-section p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Experience</h5>
+              <button type="button" id="add-experience" class="btn btn-secondary btn-sm add-btn">Add</button>
+            </div>
+            <div id="experience-list"></div>
+            <small class="text-muted">Add each experience as a single line (role, company, years).</small>
+          </div>
+
+          <!-- EDUCATION -->
+          <div class="card card-section p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Education</h5>
+              <button type="button" id="add-education" class="btn btn-secondary btn-sm add-btn">Add</button>
+            </div>
+            <div id="education-list"></div>
+            <small class="text-muted">Add educational entries.</small>
+          </div>
+
+          <!-- SKILLS -->
+          <div class="card card-section p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Skills</h5>
+              <div>
+                <input id="skill-input" class="form-control form-control-sm d-inline-block" style="width:220px" placeholder="Type a skill">
+                <button type="button" id="add-skill" class="btn btn-secondary btn-sm ms-2">Add</button>
+              </div>
+            </div>
+            <div id="skills-list" class="mb-2"></div>
+            <small class="text-muted">Click a chip to remove it.</small>
+          </div>
+
+          <!-- SOCIAL MEDIA -->
+          <div class="card card-section p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Social media</h5>
+              <button type="button" id="add-social" class="btn btn-secondary btn-sm add-btn">Add</button>
+            </div>
+            <div id="social-list"></div>
+            <small class="text-muted">Add key:value pairs like linkedin, github.</small>
+          </div>
+
+          <!-- Hidden JSON inputs (form fields provided by EmployeeForm) -->
+          {{ form.experience }}
+          {{ form.education }}
+          {{ form.skills }}
+          {{ form.social_media }}
+
+          <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Save profile</button>
+          </div>
+        </form>
+
+

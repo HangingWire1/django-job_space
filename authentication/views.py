@@ -1,5 +1,5 @@
 from django.contrib import messages, auth
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 from authentication.forms import EmployeeRegistrationForm, EmployeeLoginForm
@@ -34,3 +34,11 @@ def user_login(request):
         form = EmployeeLoginForm()
 
     return render(request, 'authentication/User_login.html', {'form': form})
+
+def user_logout(request):
+    current_role = request.session.get('active_page', 'employee')
+    logout(request)
+    new_role = 'employer' if current_role == 'employer' else 'employee'
+    request.session['active_page'] = new_role
+    messages.info(request, "You have successfully logged out.")
+    return redirect('home')

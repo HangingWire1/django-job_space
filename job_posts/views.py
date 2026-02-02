@@ -7,7 +7,7 @@ from job_posts.models import JobPost
 def load_townships(request):
     state_id = request.GET.get('state_id')
     townships = Township.objects.filter(state_id=state_id).order_by('name')
-    return render(request, 'job_posts/township_dropdown_list_options.html', {'townships': townships})
+    return render(request, 'township_dropdown_list_options.html', {'townships': townships})
 
 def search_jobs(request):
     # Start with a clean queryset

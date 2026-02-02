@@ -10,8 +10,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-    def __str__(self):
-        return self.email
+    # def __str__(self):
+    #     return self.email
 
 class State(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -29,14 +29,6 @@ class Township(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.state.name})"
-
-class Location(models.Model):
-    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
-    township = models.ForeignKey(Township, on_delete=models.SET_NULL, null=True)
-    detail_address = models.TextField(help_text="House No, Street Name, Ward, etc.")
-
-    def __str__(self):
-        return f"{self.detail_address}, {self.township.name}, {self.state.name}"
 
 class Employer(models.Model):
     is_active = models.BooleanField(default=True)
@@ -59,10 +51,10 @@ class Employer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='employer_profile',
+        related_name='employer',
         limit_choices_to = {'is_employer': True}
     )
-    profile_photo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
+    company_logo = models.ImageField(upload_to='company_logos/', null=True, blank=True)
     company_name = models.CharField(max_length=255,null=True, blank=True)
     industry = models.CharField(max_length=100,null=True, blank=True)
 
@@ -74,13 +66,7 @@ class Employer(models.Model):
 
     founded_at = models.DateField(null=True, blank=True)
 
-    # 2. Location (Assuming you have a Location model elsewhere)
-    location = models.OneToOneField(
-        'Location',
-        on_delete=models.SET_NULL,
-        null=True, blank=True
-    )
-
+    contact_email = models.EmailField(null=True, blank=True)
     # 3. Rich Text/Description Fields
     what_we_do = models.TextField(null=True, blank=True)
     why_join_us = models.TextField(null=True, blank=True)
@@ -99,7 +85,7 @@ class Employer(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.email
+            return self.user.email
 
 class Employee(models.Model):
     # Linking to the built-in User model
@@ -107,7 +93,7 @@ class Employee(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='employee_profile',  # Access via user.employee_profile
+        related_name='employee',  # Access via user.employee_profile
         limit_choices_to={'is_employee': True}
     )
 
@@ -120,8 +106,8 @@ class Employee(models.Model):
     phone = models.CharField(max_length=20,null=True, blank=True)
 
     # Location
-    state = models.OneToOneField(State, on_delete=models.SET_NULL, null=True, blank=True)
-    Township = models.OneToOneField(Township, on_delete=models.SET_NULL, null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
+    township = models.ForeignKey(Township, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Files
     profile_pic = models.ImageField(upload_to='employee/profiles/pics/', null=True, blank=True)
@@ -149,3 +135,22 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.user.email
+
+class Location(models.Model):
+    employer = models.OneToOneField(
+        Employer,
+        on_delete=models.CASCADE,
+        related_name='location',
+        null = True,
+        blank = True
+    )
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
+    township = models.ForeignKey(Township, on_delete=models.SET_NULL, null=True)
+    detail_address = models.TextField(help_text="House No, Street Name, Ward, etc.")
+
+    def __str__(self):
+        # This prevents the NoneType error by providing fallbacks for everything
+        addr = self.detail_address if self.detail_address else "No Address"
+        town = self.township.name if self.township else "No Township"
+        stat = self.state.name if self.state else "No State"
+        return f"{addr}, {town}, {stat}"

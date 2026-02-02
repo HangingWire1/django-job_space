@@ -1,0 +1,227 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Employee Profile</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card-section { margin-bottom: 1rem; }
+    .json-item { display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;}
+    .json-item input, .json-item textarea { flex:1; }
+    .remove-btn { cursor:pointer; }
+    .add-btn { min-width: 56px; }
+    .chip { padding: .25rem .5rem; border-radius: .5rem; background:#f1f1f1; margin-right:.4rem; display:inline-block; cursor:pointer;}
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <h3 class="mb-3">Edit Profile</h3>
+          {% if user.is_employee %}
+          {% include "user_profile/includes/edit_employee_profile.html" %}
+          {% else %}
+          {% include "user_profile/includes/edit_employer_profile.html" %}
+          {% endif %}
+
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="{% static 'js/dropdowns.js' %}"></script>
+    <script>
+        initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+    </script>
+  <script>
+
+    // helpers for creating rows/chips
+    function createExperienceRow(value = '') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'json-item';
+
+      const ta = document.createElement('textarea');
+      ta.className = 'form-control';
+      ta.rows = 2;
+      ta.placeholder = 'e.g. Backend Developer at ACME (2020-2023)';
+      ta.value = value || '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-outline-danger btn-sm remove-btn';
+      btn.textContent = 'Remove';
+      btn.onclick = () => wrapper.remove();
+
+      wrapper.appendChild(ta);
+      wrapper.appendChild(btn);
+      return wrapper;
+    }
+
+    function createEducationRow(value = '') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'json-item';
+
+      const ta = document.createElement('textarea');
+      ta.className = 'form-control';
+      ta.rows = 2;
+      ta.placeholder = 'e.g. B.Sc. Computer Science — University X (2015-2019)';
+      ta.value = value || '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-outline-danger btn-sm remove-btn';
+      btn.textContent = 'Remove';
+      btn.onclick = () => wrapper.remove();
+
+      wrapper.appendChild(ta);
+      wrapper.appendChild(btn);
+      return wrapper;
+    }
+
+    function createSocialRow(key = '', value = '') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'json-item';
+
+      const keyInput = document.createElement('input');
+      keyInput.className = 'form-control';
+      keyInput.placeholder = 'platform (e.g. linkedin)';
+      keyInput.value = key || '';
+
+      const valueInput = document.createElement('input');
+      valueInput.className = 'form-control';
+      valueInput.placeholder = 'url or handle';
+      valueInput.value = value || '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-outline-danger btn-sm remove-btn';
+      btn.textContent = 'Remove';
+      btn.onclick = () => wrapper.remove();
+
+      wrapper.appendChild(keyInput);
+      wrapper.appendChild(valueInput);
+      wrapper.appendChild(btn);
+      return wrapper;
+    }
+
+    function createSkillChip(skill) {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = skill;
+      chip.title = 'Click to remove';
+      chip.onclick = () => chip.remove();
+      return chip;
+    }
+
+    // Hydrate UI from JSON embedded via json_script
+    function loadInitial() {
+      let exp = [];
+      let edu = [];
+      let skills = [];
+      let social = {};
+
+      try {
+        const expEl = document.getElementById('experience-data');
+        if (expEl) exp = JSON.parse(expEl.textContent || '[]');
+      } catch (e) { exp = []; }
+
+      try {
+        const eduEl = document.getElementById('education-data');
+        if (eduEl) edu = JSON.parse(eduEl.textContent || '[]');
+      } catch (e) { edu = []; }
+
+      try {
+        const skillsEl = document.getElementById('skills-data');
+        if (skillsEl) skills = JSON.parse(skillsEl.textContent || '[]');
+      } catch (e) { skills = []; }
+
+      try {
+        const socialEl = document.getElementById('social-data');
+        if (socialEl) social = JSON.parse(socialEl.textContent || '{}');
+      } catch (e) { social = {}; }
+
+      const expList = document.getElementById('experience-list');
+      exp.forEach(x => expList.appendChild(createExperienceRow(x)));
+
+      const eduList = document.getElementById('education-list');
+      edu.forEach(x => eduList.appendChild(createEducationRow(x)));
+
+      const skillsList = document.getElementById('skills-list');
+      skills.forEach(s => skillsList.appendChild(createSkillChip(s)));
+
+      const socialList = document.getElementById('social-list');
+      Object.entries(social).forEach(([k, v]) => socialList.appendChild(createSocialRow(k, v)));
+    }
+
+    // Collect UI values into hidden inputs before submit
+    function collectToHiddenInputs() {
+      // Experience
+      const expNodes = Array.from(document.querySelectorAll('#experience-list .json-item textarea'));
+      const expValues = expNodes.map(n => n.value.trim()).filter(v => v.length);
+      const expHidden = document.querySelector('input[name="experience"]');
+      if (expHidden) expHidden.value = JSON.stringify(expValues);
+
+      // Education
+      const eduNodes = Array.from(document.querySelectorAll('#education-list .json-item textarea'));
+      const eduValues = eduNodes.map(n => n.value.trim()).filter(v => v.length);
+      const eduHidden = document.querySelector('input[name="education"]');
+      if (eduHidden) eduHidden.value = JSON.stringify(eduValues);
+
+      // Skills
+      const skillChips = Array.from(document.querySelectorAll('#skills-list .chip'));
+      const skills = skillChips.map(c => c.textContent.trim()).filter(v => v.length);
+      const skillsHidden = document.querySelector('input[name="skills"]');
+      if (skillsHidden) skillsHidden.value = JSON.stringify(skills);
+
+      // Social
+      const socialMap = {};
+      const socialRows = Array.from(document.querySelectorAll('#social-list .json-item'));
+      socialRows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length >= 2) {
+          const k = inputs[0].value.trim();
+          const v = inputs[1].value.trim();
+          if (k) socialMap[k] = v;
+        }
+      });
+      const socialHidden = document.querySelector('input[name="social_media"]');
+      if (socialHidden) socialHidden.value = JSON.stringify(socialMap);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadInitial();
+
+      document.getElementById('add-experience').addEventListener('click', function(){
+        document.getElementById('experience-list').appendChild(createExperienceRow(''));
+      });
+
+      document.getElementById('add-education').addEventListener('click', function(){
+        document.getElementById('education-list').appendChild(createEducationRow(''));
+      });
+
+      document.getElementById('add-social').addEventListener('click', function(){
+        document.getElementById('social-list').appendChild(createSocialRow('',''));
+      });
+
+      document.getElementById('add-skill').addEventListener('click', function(){
+        const input = document.getElementById('skill-input');
+        const val = (input.value || '').trim();
+        if (!val) return;
+        document.getElementById('skills-list').appendChild(createSkillChip(val));
+        input.value = '';
+      });
+
+      // On submit: collect values to hidden inputs
+      document.getElementById('employee-form').addEventListener('submit', function(e){
+        collectToHiddenInputs();
+        // allow submission to continue
+      });
+    });
+  </script>
+</body>
+</html>

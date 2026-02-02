@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from job_space_main import views
+from job_space_main import views, settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('active_page/',views.active_page,name='active_page'),
     path('job_posts/',include('job_posts.urls')),
     path('authentication/',include('authentication.urls')),
-]
+    path('user_profile/',include('user_profile.urls')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
