@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from authentication.models import Employee, Employer, Location
+from job_posts.models import JobPost
 from .forms import EmployeeProfileForm, EmployerProfileForm, LocationForm
 
 
@@ -95,3 +96,22 @@ def edit_employer_profile(request):
         "employer": employer,
         "profile_type": "employer"
     })
+
+
+
+def view_employee_profile(request,id):
+    employee = get_object_or_404(Employee, id=id)
+    return render(request,"user_profile/view_employee_profile.html",{"employee": employee})
+
+def view_employer_profile(request,id,category):
+    employer = get_object_or_404(Employer, id=id)
+    jobs = JobPost.objects.filter(employer=employer)
+    context = {
+        "employer": employer,
+        "category": category,
+        "jobs": jobs,
+    }
+    if category == "jobs":
+        return render(request,"user_profile/view_employer_profile.html",context)
+    else:
+        return render(request,"user_profile/view_employer_profile.html",context)

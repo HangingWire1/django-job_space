@@ -12,12 +12,12 @@ class UserAdmin(UserAdmin):
 
 
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('user__email', 'employee_name','is_active',)
+    list_display = ('user__email', 'id','employee_name','is_active',)
     search_fields = ('user__email', 'employee_name',)
     list_editable = ("is_active",)
 
 class EmployerAdmin(admin.ModelAdmin):
-    list_display = ('user_email', 'company_name', 'is_active')
+    list_display = ('user_email', 'id','company_name', 'is_active')
     search_fields = ('user__email', 'company_name')
     list_editable = ('is_active',)
     inlines = [LocationInline]

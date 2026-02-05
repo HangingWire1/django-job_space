@@ -1,0 +1,81 @@
+<!-- Replace your current company-details / details-grid block with this -->
+    <div class="section">
+  <div class="details-grid">
+    <!-- Left column: company details with title above -->
+    <div class="col">
+      <div class="section-title">company details</div>
+      <div class="card">
+        <div class="kv">
+          <div class="k">Industry:</div>
+          <div class="v">{{ employer.industry|default:"-" }}</div>
+        </div>
+
+        <div class="kv">
+          <div class="k">Founded:</div>
+          <div class="v">
+            {% if employer.founded_at %}
+              {{ employer.founded_at|date:"Y" }}
+            {% else %}
+              -
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="kv">
+          <div class="k">employee:</div>
+          <div class="v">{{ employer.get_no_of_employee_display }}</div>
+        </div>
+
+        <div class="kv">
+          <div class="k">Email:</div>
+          <div class="v">{{ employer.contact_email|default:"-" }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: address with title above -->
+    <div class="col">
+      <div class="section-title">address</div>
+      <div class="card">
+        <div class="kv">
+          <div class="k">Detail address:</div>
+          <div class="v">i am detail address</div>
+        </div>
+
+        <div class="kv">
+          <div class="k">City:</div>
+          <div class="v">Yangon, Myanmar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="section">
+  <div class="details-grid">
+    <!--what we do-->
+    <div class="col">
+      <div class="section-title">what we do</div>
+        <div class="card">
+          {{ employer.what_we_do|default:"No information provided." }}
+        </div>
+    </div>
+
+    <!-- ===== Why join us ===== -->
+        <div class="col">
+      <div class="section-title">why you should join us</div>
+        <div class="card">
+            {{ employer.why_join_us|default:"No information provided." }}
+        </div>
+    </div>
+  </div>
+</div>
+
+  <!-- ===== Mission & vision ===== -->
+    <div class="section">
+    <div class="section-title">our mission and vision</div>
+    <div class="card">
+      {{ employer.mission_vision|default:"No information provided." }}
+    </div>
+  </div>
