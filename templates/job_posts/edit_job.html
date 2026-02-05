@@ -1,0 +1,146 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+{% if request.resolver_match.url_name == "edit_job" %}
+    <title>Edit Job</title>
+{% else %}
+    <title>Post job</title>
+{% endif %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body { background: #f5f7fb; }
+.card { border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.form-label.required::after { content: "*"; color: #dc3545; margin-left: 4px; }
+.section-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 12px; color: #333; }
+</style>
+</head>
+
+<body>
+<div class="container py-5">
+<div class="row justify-content-center">
+<div class="col-lg-9">
+
+
+{% if request.resolver_match.url_name == "edit_job" %}
+    <h2 class="mb-3">Edit Job</h2>
+    <p class="text-muted mb-4">Update the job details below.</p>
+{% else %}
+    <h2 class="mb-3">Post Job</h2>
+    <p class="text-muted mb-4">Fill in the job details below to publish a new job post.</p>
+{% endif %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="card">
+<div class="card-body p-4">
+
+<form method="post" novalidate>
+{% csrf_token %}
+
+<div class="section-title">Basic Information</div>
+
+<div class="mb-3">
+  <label class="form-label required">Job Title</label>
+  {{ form.title }} {{ form.title.errors }}
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-6">
+    <label class="form-label">Salary</label>
+    {{ form.salary }} {{ form.salary.errors }}
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Job Type</label>
+    {{ form.job_type }} {{ form.job_type.errors }}
+  </div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Category</label>
+  {{ form.category }} {{ form.category.errors }}
+</div>
+
+<hr class="my-4">
+
+<div class="section-title">Job Location</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-6">
+    <label class="form-label required">State</label>
+    {{ form.state }} {{ form.state.errors }}
+  </div>
+  <div class="col-md-6">
+    <label class="form-label required">Township</label>
+    {{ form.township }} {{ form.township.errors }}
+  </div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label required">Detailed Address</label>
+  {{ form.detail_address }} {{ form.detail_address.errors }}
+</div>
+
+<hr class="my-4">
+
+<div class="section-title">Job Details</div>
+
+<div class="mb-3">
+  <label class="form-label required">Description</label>
+  {{ form.description }} {{ form.description.errors }}
+</div>
+
+<div class="mb-3">
+  <label class="form-label required">Requirements</label>
+  {{ form.requirements }} {{ form.requirements.errors }}
+</div>
+
+<hr class="my-4">
+
+<div class="section-title">Contact Information</div>
+
+<div class="mb-3">
+  <label class="form-label">Contact Email</label>
+  {{ form.contact_email }} {{ form.contact_email.errors }}
+</div>
+
+
+
+{% if request.resolver_match.url_name == "edit_job" %}
+    <div class="d-flex justify-content-between">
+      <a href="{% url 'jobs_list' %}" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary px-4">Update Job</button>
+    </div>
+{% else %}
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary px-4">Publish Job</button>
+    </div>
+{% endif %}
+
+</form>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/dropdowns.js' %}"></script>
+<script>
+initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+</script>
+</body>
+</html>

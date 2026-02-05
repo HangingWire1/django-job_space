@@ -85,8 +85,8 @@
         <h1>{{ job.title }}</h1>
         <p>
             Posted: {{ job.created_at|timesince }} ago by
-            <a href="" class="employer-link">
-                {{ job.employer.user.username }}
+            <a href="{% url 'view_employer_profile' job.employer.id 'about' %}" class="employer-link">
+                {{ job.employer.company_name }}
             </a>
         </p>
     </div>
@@ -103,7 +103,7 @@
     </div>
 
     <h3 class="section-title">Detail Address</h3>
-    <p class="text-content">{{ job.detail_address }}</p>
+    <p class="text-content">{{ job.location.detail_address }}</p>
 
     <h3 class="section-title">Job Description</h3>
     <p class="text-content">{{ job.description }}</p>

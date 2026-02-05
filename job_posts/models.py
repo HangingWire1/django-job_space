@@ -33,14 +33,6 @@ class JobPost(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES, default='full_time')
 
-    #company info
-    company_name = models.CharField(max_length=255)
-    detail_address = models.TextField(
-        blank=True,
-        null=True,
-        help_text="Enter the specific building number, street, or directions."
-    )
-
     # Details
     description = models.TextField()
     requirements = models.TextField()
@@ -51,9 +43,17 @@ class JobPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        # Auto-create slug if it's empty
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+
+            while JobPost.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
         super().save(*args, **kwargs)
 
     def __str__(self):
