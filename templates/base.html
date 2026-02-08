@@ -220,11 +220,14 @@
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="{% url 'edit_employee_profile' %}">Profile</a></li>
-            <li><a href="/applications/">Applications</a></li>
-            <li><a href="{% url 'user_login' %}">Login</a></li>
-            <li><a href="{% url 'user_registration' %}">Register</a></li>
-            <li><a href="{% url 'user_logout' %}">Logout</a></li>
+            {% if user.is_employee %}
+                <li><a href="{% url 'edit_employee_profile' %}">Profile</a></li>
+                <li><a href="/applications/">Applications</a></li>
+                <li><a href="{% url 'user_logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'user_login' %}">Login</a></li>
+                <li><a href="{% url 'user_registration' %}">Register</a></li>
+            {% endif %}
 
             <li>
                 <form action="{% url 'active_page' %}" method="POST" style="display:inline;">
@@ -241,12 +244,15 @@
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="{% url 'edit_employer_profile' %}">Profile</a></li>
-            <li><a href="{% url 'jobs_list' %}">My posts</a></li>
-            <li><a href="/applicants/">Applicants</a></li>
-            <li><a href="{% url 'user_login' %}">Login</a></li>
-            <li><a href="{% url 'user_registration' %}">Register</a></li>
-            <li><a href="{% url 'user_logout' %}">Logout</a></li>
+            {% if user.is_employer %}
+                <li><a href="{% url 'edit_employer_profile' %}">Profile</a></li>
+                <li><a href="{% url 'jobs_list' %}">My posts</a></li>
+                <li><a href="/applicants/">Applicants</a></li>
+                <li><a href="{% url 'user_logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'user_login' %}">Login</a></li>
+                <li><a href="{% url 'user_registration' %}">Register</a></li>
+            {% endif %}
 
             <li>
                 <form action="{% url 'active_page' %}" method="POST" style="display:inline;">
