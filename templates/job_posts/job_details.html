@@ -116,10 +116,10 @@
 <!--            <span class="applied-status">Applied</span>-->
 <!--        {% else %}-->
 
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <button type="submit" class="btn-apply">Apply for this Job</button>
-            </form>
+            <a href="{% url 'apply_for_job' job_slug=job.slug %}" class="btn btn-primary">
+                Apply Now
+            </a>
+
 <!--        {% endif %}-->
     </div>
 </div>

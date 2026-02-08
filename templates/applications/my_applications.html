@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .application-card {
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.2s ease-in-out;
+        border-left: 4px solid #0d6efd; /* Default border color */
+    }
+    .application-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    /* Custom border colors based on status */
+    .status-waited { border-left-color: #0d6efd; } /* Blue */
+    .status-to_interview { border-left-color: #ffc107; } /* Yellow */
+    .status-accepted { border-left-color: #198754; } /* Green */
+    .status-rejected { border-left-color: #6c757d; } /* Grey for rejected */
+    .status-withdrawn { border-left-color: #dc3545; } /* Red for withdrawn */
+
+    .status-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.4em 0.7em;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">My Job Applications</h1>
+
+    </div>
+
+    {% if applications %}
+        <div class="row g-4">
+            {% for app in applications %}
+            <div class="col-12">
+                <div class="card application-card status-{{ app.status }}">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+
+                            <!-- Left Side: Job Info -->
+                            <div class="mb-3 mb-md-0">
+                                <h5 class="card-title mb-1">
+                                    <a href="{% url 'job_details' job_slug=app.job.slug %}" class="text-decoration-none stretched-link">{{ app.job.title }}</a>
+                                </h5>
+                                <p class="card-subtitle text-muted">{{ app.job.employer }}</p>
+                                <small class="text-muted">Applied: {{ app.applied_at|timesince }} ago</small>
+                            </div>
+
+                            <!-- Right Side: Status and Actions -->
+                            <div class="text-start text-md-end">
+                                {% comment %} Status Badge with dynamic colors {% endcomment %}
+                                {% if app.status == 'waited' %}
+                                    <span class="badge rounded-pill bg-primary status-badge">Submitted</span>
+                                {% elif app.status == 'to_interview' %}
+                                    <span class="badge rounded-pill bg-warning text-dark status-badge">Under Review</span>
+                                {% elif app.status == 'accepted' %}
+                                    <span class="badge rounded-pill bg-success status-badge">Accepted</span>
+                                {% elif app.status == 'rejected' %}
+                                    <span class="badge rounded-pill bg-secondary status-badge">Not Selected</span>
+                                {% elif app.status == 'withdrawn' %}
+                                    <span class="badge rounded-pill bg-danger status-badge">Withdrawn by You</span>
+                                {% endif %}
+
+                                {% comment %} Withdraw Button (inside a safe form) {% endcomment %}
+                                {% if app.status == 'waited' or app.status == 'to_interview' %}
+                                    <form action="{% url 'withdraw_application' app.id %}" method="post" class="d-inline ms-md-2" style="position: relative; z-index: 10;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to withdraw this application?');">
+                                            Withdraw
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                                {% comment %} --- NEWLY ADDED ARCHIVE BUTTON --- {% endcomment %}
+                                {% if app.status == 'withdrawn' or app.status == 'rejected' %}
+                                    <form action="{% url 'archive_application' app.id %}" method="post" class="d-inline ms-md-2" style="position: relative; z-index: 10;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm" title="Hide from list" onclick="return confirm('Are you sure you want to hide this application from the list?');">
+                                            Archive
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-file-earmark-person text-muted" viewBox="0 0 16 16">
+              <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 1A1.5 1.5 0 0 0 11 2.5v2A1.5 1.5 0 0 0 9.5 6h-3A1.5 1.5 0 0 0 5 4.5v-2A1.5 1.5 0 0 0 6.5 1h3z"/>
+            </svg>
+            <h4 class="text-muted mt-3">You haven't applied for any jobs yet.</h4>
+            <p>Once you apply for jobs, they will appear here.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Find Jobs to Apply For</a> {# Make sure you have a URL named 'job_list' #}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

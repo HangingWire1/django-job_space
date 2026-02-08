@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .detail-card {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #e0e0e0;
+    }
+    .detail-card .card-header {
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
+    .skill-badge {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container my-5">
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5">{{ application.employee_name }}</h1>
+        <p class="lead text-muted">Application for 
+            <a href="{% url 'job_details' job_slug=application.job.slug %}">{{ application.job.title }}</a>
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <!-- ===== LEFT COLUMN (CONTACT & QUICK INFO) ===== -->
+        <div class="col-lg-4">
+            <div class="card detail-card p-3 text-center sticky-lg-top">
+                <div class="card-body">
+                    <!-- Profile Photo -->
+                    {% if application.employee and application.employee.profile_pic %}
+                        <img src="{{ application.employee.profile_pic.url }}" alt="{{ application.employee.employee_name }}" class="profile-pic mb-3">
+                    {% else %}
+                        <div class="mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-person-circle text-muted" viewBox="0 0 16 16"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/></svg>
+                        </div>
+                    {% endif %}
+
+                    <!-- Contact Details -->
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2 text-primary"></i> {{ application.township }}, {{ application.state }}</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill me-2 text-primary"></i> {{ application.email }}</li>
+                        {% if application.phone %}<li class="mb-2"><i class="bi bi-telephone-fill me-2 text-primary"></i> {{ application.phone }}</li>{% endif %}
+                        {% if application.salary_expect %}<li class="mb-2"><i class="bi bi-cash-coin me-2 text-primary"></i> Expects: ${{ application.salary_expect|floatformat:2 }}</li>{% endif %}
+                    </ul>
+
+                    <!-- CV Download Button -->
+                    {% if application.cv_file %}
+                        <a href="{{ application.cv_file.url }}" target="_blank" class="btn btn-primary w-100 mb-3">Download CV</a>
+                    {% else %}
+                        <p class="small text-muted">No CV was submitted with this application.</p>
+                    {% endif %}
+
+                    <!-- Social Media Links -->
+                    {% if application.social_media %}
+                    <div class="text-start">
+                        <h6 class="fw-bold">Social Media</h6>
+                        <hr class="mt-0">
+                        {% for platform, url in application.social_media.items %}
+                            <a href="{{ url }}" target="_blank" class="text-decoration-none d-block mb-2">
+                                <i class="bi bi-{{ platform|lower }} me-2"></i> {{ platform }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RIGHT COLUMN (APPLICATION CONTENT) ===== -->
+        <div class="col-lg-8">
+            <!-- Cover Letter -->
+            {% if application.cover_letter %}
+            <div class="card detail-card mb-4">
+                <div class="card-header">Cover Letter</div>
+                <div class="card-body" style="white-space: pre-wrap;">{{ application.cover_letter|linebreaksbr }}</div>
+            </div>
+            {% endif %}
+
+            <!-- Experience -->
+            <div class="card detail-card mb-4">
+                <div class="card-header">Work Experience</div>
+                <div class="card-body">
+                    {% if application.experience %}
+                        <ol style="padding-left:18px; margin:0;">
+                            {% for exp_item in application.experience %}
+                                <li class="list-item" style="list-style:decimal; margin-bottom:12px;">
+                                    <div style="font-weight:600;">{{ exp_item }}</div>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <div class="small text-muted">No experience records were submitted.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="card detail-card mb-4">
+                <div class="card-header">Education</div>
+                <div class="card-body">
+                    {% if application.education %}
+                        <ul class="list-unstyled">
+                            {% for edu_item in application.education %}
+                                <li class="mb-2"><i class="bi bi-mortarboard me-2"></i> {{ edu_item }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="small text-muted">No education records were submitted.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="card detail-card">
+                <div class="card-header">Skills</div>
+                <div class="card-body">
+                    {% if application.skills %}
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for skill in application.skills %}
+                                <span class="badge rounded-pill bg-secondary skill-badge">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="small text-muted">No skills were listed.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

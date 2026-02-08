@@ -154,3 +154,5 @@ class Location(models.Model):
         town = self.township.name if self.township else "No Township"
         stat = self.state.name if self.state else "No State"
         return f"{addr}, {town}, {stat}"
+
+

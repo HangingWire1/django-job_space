@@ -28,6 +28,8 @@ class JobPostAdminForm(forms.ModelForm):
 class JobPostAdmin(admin.ModelAdmin):
     form = JobPostAdminForm
 
+    exclude = ('location', 'slug',)
+
     def save_model(self, request, obj, form, change):
         # 1. Create/Update the Location first
         loc, created = Location.objects.get_or_create(

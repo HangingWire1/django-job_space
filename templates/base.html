@@ -247,7 +247,7 @@
             {% if user.is_employer %}
                 <li><a href="{% url 'edit_employer_profile' %}">Profile</a></li>
                 <li><a href="{% url 'jobs_list' %}">My posts</a></li>
-                <li><a href="/applicants/">Applicants</a></li>
+                <li><a href="{% url 'manage_applicants' %}">Applicants</a></li>
                 <li><a href="{% url 'user_logout' %}">Logout</a></li>
             {% else %}
                 <li><a href="{% url 'user_login' %}">Login</a></li>

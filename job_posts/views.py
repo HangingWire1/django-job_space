@@ -48,9 +48,6 @@ def job_details(request, job_slug):
     job = JobPost.objects.get(slug=job_slug)
     return render(request, 'job_posts/job_details.html', {'job': job})
 
-def post_job(request):
-    return render(request, 'job_posts/edit_job.html')
-
 @login_required
 def post_job(request):
     # Find employer profile for the logged in user.
@@ -62,7 +59,7 @@ def post_job(request):
         except (Employer.DoesNotExist, Employer.MultipleObjectsReturned):
             messages.error(request, "You need an Employer profile to post jobs. Please create one first.")
             # Replace 'employer_profile_create' with the actual URL name where employers create their profile.
-            return redirect('employer_profile_create')
+            return redirect('user_registration')
 
     if request.method == 'POST':
         form = JobPostForm(request.POST)
