@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from job_posts.models import JobPost
@@ -27,5 +28,7 @@ def active_page(request):
         request.session['active_page'] = new_role
         # print("new_role==", request.session.get('active_page', 'employee'))
 
+        messages.success(request, "You are now active as an " + new_role)
+        return redirect('home')
         # 3. Redirect back to where they came from
         return redirect(request.META.get('HTTP_REFERER', '/'))

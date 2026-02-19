@@ -20,9 +20,9 @@ def apply_for_job(request, job_slug):
     employee = request.user.employee
 
     # Check if they have already applied (no changes needed here)
-    if Application.objects.filter(job=job, employee=employee).exists():
-        messages.warning(request, "You have already applied for this job.")
-        return redirect('job_details', job_slug=job_slug)
+    # if Application.objects.filter(job=job, employee=employee).exists():
+    #     messages.warning(request, "You have already applied for this job.")
+    #     return redirect('job_details', job_slug=job_slug)
 
     if request.method == 'POST':
         # NOTE: We bind the form to the instance to handle file uploads easily.
@@ -34,23 +34,28 @@ def apply_for_job(request, job_slug):
 
             # --- 1. CREATE THE APPLICATION SNAPSHOT FIRST ---
             # This ensures the snapshot always has exactly what the user submitted.
-            Application.objects.create(
+            # This is how you would correctly structure the update_or_create call
+
+            application, created = Application.objects.update_or_create(
+                # 1. LOOKUP: These fields are used to find the existing application.
+                # These MUST match your database's UNIQUE constraint.
                 job=job,
-                employee=employee,  # Link to the original employee
-                status='waited',
+                employee=employee,
 
-                # Get data directly from the validated form's cleaned_data
-                employee_name=cleaned_data.get('employee_name'),
-                email=cleaned_data.get('email'),
-                phone=cleaned_data.get('phone'),
-                cv_file=cleaned_data.get('cv_file'),
-                salary_expect=cleaned_data.get('salary_expect'),
-                cover_letter=cleaned_data.get('cover_letter'),
-
-                # Copy the JSON fields from the employee's current profile
-                experience=employee.experience,
-                education=employee.education,
-                skills=employee.skills,
+                # 2. DEFAULTS: If a record is found, these fields will be UPDATED.
+                # If no record is found, a NEW record will be CREATED with all these values.
+                defaults={
+                    'status': 'waited',  # you might want to update this too
+                    'employee_name': form.cleaned_data.get('employee_name'),
+                    'email': form.cleaned_data.get('email'),
+                    'phone': form.cleaned_data.get('phone'),
+                    'cv_file': form.cleaned_data.get('cv_file'),
+                    'salary_expect': form.cleaned_data.get('salary_expect'),
+                    'cover_letter': form.cleaned_data.get('cover_letter'),
+                    'experience': employee.experience,
+                    'education': employee.education,
+                    'skills': employee.skills,
+                }
             )
 
             # --- 2. NOW, CONDITIONALLY UPDATE THE EMPLOYEE PROFILE ---

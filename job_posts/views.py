@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from authentication.models import Township, State, Location, Employer
+
+from applications.models import Application
+from authentication.models import Township, State, Location, Employer, Employee
 from job_posts.forms import JobPostForm
 from job_posts.models import JobPost
 
@@ -46,7 +48,29 @@ def search_jobs(request):
 
 def job_details(request, job_slug):
     job = JobPost.objects.get(slug=job_slug)
-    return render(request, 'job_posts/job_details.html', {'job': job})
+
+    user_has_applied = False
+    if request.user.is_authenticated and request.user.is_employee:
+        try:
+            # Step 1: Get the Employee profile linked to the User
+            employee_profile = request.user.employee
+
+            # Step 2: Use the Employee profile to filter applications
+            user_has_applied = Application.objects.filter(
+                job=job,
+                employee=employee_profile
+            ).exclude(status='withdrawn').exists()
+
+        except Employee.DoesNotExist:
+            # This is a safety check. It handles cases where a user might be marked
+            # as an employee but doesn't have an Employee profile object created yet.
+            user_has_applied = False
+
+    context = {
+        'job': job,
+        'user_has_applied': user_has_applied,
+    }
+    return render(request, 'job_posts/job_details.html', context)
 
 @login_required
 def post_job(request):

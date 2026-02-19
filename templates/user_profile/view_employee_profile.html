@@ -18,7 +18,7 @@
                     <img src="{{ employee.profile_pic.url }}" alt="Profile picture" class="summary-card__image">
                 {% else %}
                     {# It's good practice to have a default avatar. Make sure this path is correct. #}
-                    <img src="{% static 'images/default-avatar.png' %}" alt="Default profile picture" class="summary-card__image">
+                    <img src="{% static 'images/default-avatar.jpg' %}" alt="Default profile picture" class="summary-card__image">
                 {% endif %}
 
                 <h1 class="summary-card__name">{{ employee.employee_name|default:"Unnamed Employee" }}</h1>

@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
+        <!-- Toastify CSS - ADD THIS LINE -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <!-- Core Layout and Theme Styles -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
@@ -22,26 +25,50 @@
     {% block styles %}{% endblock %}
 </head>
 <body>
+
+    {% if messages %}
+    {# This is a hidden container for our messages. JS will find them here. #}
+    <div id="django-messages" style="display: none;">
+        {% for message in messages %}
+            {# We use the message.tags to know if it's a success, error, etc. #}
+            <div class="django-message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <header class="header">
         <nav class="navbar container">
             <a class="navbar__logo" href="/">job<strong>Space</strong></a>
 
             <ul class="navbar__links">
                 <li><a class="navbar__link" href="/">Home</a></li>
-                {% if user.is_authenticated %}
+
+
+
                     {% if active_page == 'employee' %}
                         <li><a class="navbar__link" href="{% url 'edit_employee_profile' %}">Profile</a></li>
                         <li><a class="navbar__link" href="{% url 'my_applications' %}">Applications</a></li>
+
+                        {% if user.is_authenticated and user.is_employee %}
+                            <li><a class="navbar__link" href="{% url 'user_logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a class="navbar__link" href="{% url 'user_login' %}">Login</a></li>
+                            <li><a class="navbar__link" href="{% url 'user_registration' %}">Register</a></li>
+                        {% endif %}
+
                     {% else %}
                         <li><a class="navbar__link" href="{% url 'edit_employer_profile' %}">Profile</a></li>
                         <li><a class="navbar__link" href="{% url 'jobs_list' %}">My Posts</a></li>
                         <li><a class="navbar__link" href="{% url 'manage_applicants' %}">Applicants</a></li>
+
+                        {% if user.is_authenticated and user.is_employer %}
+                            <li><a class="navbar__link" href="{% url 'user_logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a class="navbar__link" href="{% url 'user_login' %}">Login</a></li>
+                            <li><a class="navbar__link" href="{% url 'user_registration' %}">Register</a></li>
+                        {% endif %}
+
                     {% endif %}
-                    <li><a class="navbar__link" href="{% url 'user_logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a class="navbar__link" href="{% url 'user_login' %}">Login</a></li>
-                    <li><a class="navbar__link" href="{% url 'user_registration' %}">Register</a></li>
-                {% endif %}
             </ul>
 
             <div class="navbar__actions">
@@ -73,6 +100,9 @@
         </div>
     </footer>
 
+        <!-- Toastify JS - ADD THIS LINE -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <!-- Your existing JS for dropdowns -->
     <script src="{% static 'js/dropdowns.js' %}"></script>
     <script>
@@ -81,6 +111,48 @@
     </script>
 
     <!-- Block for any page-specific scripts -->
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+
+    {# The toast-handling script showing notifications #}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messagesContainer = document.getElementById('django-messages');
+        if (messagesContainer) {
+            const messageElements = messagesContainer.querySelectorAll('.django-message');
+
+            messageElements.forEach(function(messageEl) {
+                const messageText = messageEl.textContent;
+                const messageTags = messageEl.className;
+
+                let backgroundColor;
+
+                if (messageTags.includes('success')) {
+                    backgroundColor = "linear-gradient(to right, #00b09b, #96c93d)";
+                } else if (messageTags.includes('error')) {
+                    backgroundColor = "linear-gradient(to right, #ff5f6d, #ffc371)";
+                } else if (messageTags.includes('warning')) {
+                    backgroundColor = "linear-gradient(to right, #f7b733, #fc4a1a)";
+                } else {
+                    backgroundColor = "linear-gradient(to right, #0D2A4D, #1a4a8a)";
+                }
+
+                Toastify({
+                    text: messageText,
+                    duration: 5000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: backgroundColor,
+                    },
+                }).showToast();
+            });
+        }
+    });
+    </script>
+    {% endblock %}
+
+
 </body>
 </html>

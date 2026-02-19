@@ -10,8 +10,13 @@ def user_registration(request):
     if request.method == 'POST':
         form = EmployeeRegistrationForm(request.POST,active_page=current_active_page)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Account created successfully!")
+            user = form.save()
+            login(request, user)
+
+            request.session['active_page'] = current_active_page
+            request.session.set_expiry(None)
+
+            messages.success(request, current_active_page + " account created successfully!")
             return redirect('home')
     else:
         form = EmployeeRegistrationForm(active_page=current_active_page)
@@ -20,6 +25,7 @@ def user_registration(request):
 
 
 def user_login(request):
+    current_active_page = request.session.get('active_page', 'employee')
     if request.method == 'POST':
         form = EmployeeLoginForm(request, data=request.POST)
         if form.is_valid():
@@ -29,6 +35,11 @@ def user_login(request):
 
             # Now we just log them in
             login(request, user)
+
+            request.session['active_page'] = current_active_page
+            request.session.set_expiry(None)
+
+            messages.success(request, "You are now logged in as an"+current_active_page)
             return redirect('home')
     else:
         form = EmployeeLoginForm()

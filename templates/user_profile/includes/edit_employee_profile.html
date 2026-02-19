@@ -1,3 +1,5 @@
+{% load static %}
+
 <!-- Safely embed current JSON data for hydration -->
 {{ experience_json|json_script:"experience-data" }}
 {{ education_json|json_script:"education-data" }}
@@ -20,11 +22,21 @@
                 <div class="form-group"><label for="{{ form.township.id_for_label }}">Township</label>{{ form.township }}</div>
                 <div class="form-group">
                     <label for="{{ form.profile_pic.id_for_label }}">Profile Picture</label>{{ form.profile_pic }}
-                    {% if employee.profile_pic.url %}<img src="{{ employee.profile_pic.url }}" alt="Profile Picture" class="profile-pic-preview">{% endif %}
+
+                    {% if employee.profile_pic and employee.profile_pic.name%}
+                        <img src="{{ employee.profile_pic.url }}" alt="Profile Picture" class="profile-pic-preview">
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.jpg' %}" alt="Default Profile Picture" class="profile-pic-preview">
+                    {% endif %}
+
                 </div>
                 <div class="form-group">
                     <label for="{{ form.cv_file.id_for_label }}">CV / Resume</label>{{ form.cv_file }}
-                    {% if employee.cv_file.url %}<a href="{{ employee.cv_file.url }}" target="_blank" class="current-file-link">View Current CV</a>{% endif %}
+
+                    {% if employee and employee.cv_file %}
+                        <a href="{{ employee.cv_file.url }}" target="_blank" class="current-file-link">View Current CV</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
