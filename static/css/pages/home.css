@@ -1,0 +1,161 @@
+/* -------------------- */
+/* --- HOME PAGE STYLES --- */
+/* -------------------- */
+
+/* --- Hero Section --- */
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero__title {
+    font-family: var(--font-heading);
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Section Titles --- */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* --- Job List & Job Card (Employee View) --- */
+.job-list {
+    display: grid;
+    gap: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.job-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.job-card:hover {
+    border-color: #d1d9e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.job-card__title a {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.job-card__title a:hover {
+    color: var(--accent-color);
+}
+
+.job-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light-color);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* --- Utility & Component Buttons --- */
+.btn--outline {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+.btn--outline:hover {
+    background-color: var(--accent-color);
+    color: var(--surface-color);
+}
+
+.btn--secondary {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+.btn--secondary:hover {
+    border-color: #adb5bd;
+    background-color: #f1f3f5;
+}
+
+.btn--lg {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+}
+
+/* --- Employer Call-to-Action (Employer View) --- */
+.employer-cta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    text-align: left;
+    background: var(--surface-color);
+    padding: 3rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 30px rgba(13, 42, 77, 0.05);
+}
+
+.employer-cta__title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.employer-cta__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+}
+
+.employer-cta__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.employer-cta__actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.employer-cta__right {
+    flex-shrink: 0;
+}
+
+.employer-cta__illustration {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.05), rgba(0, 167, 157, 0.1));
+}
+

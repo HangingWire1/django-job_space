@@ -1,0 +1,107 @@
+/* ------------------------ */
+/* --- APPLY PAGE STYLES --- */
+/* ------------------------ */
+
+/* Make the card slightly wider for this form */
+.apply-card {
+    max-width: 700px;
+}
+
+/* Header section with Job Title */
+.apply-header {
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+/* Reduce the main title margin when it's in this header */
+.apply-header .auth-card__title {
+    margin-bottom: 0.25rem;
+}
+.apply-header__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+    margin: 0;
+}
+
+/* Titles for "Your Information" and "Application Details" */
+.form-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.form-section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Divider between form sections */
+.form-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0;
+}
+
+/* Styling for the CV/File input fields */
+.auth-form input[type="file"] {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.5rem;
+    width: 100%;
+    font-family: var(--font-body);
+}
+
+.current-file-display {
+    margin-bottom: 0.5rem;
+}
+.current-file-display a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 700;
+}
+.current-file-display a:hover {
+    background-color: #e9ecef;
+}
+.current-file-display svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-light-color);
+}
+
+
+/* Form submission and cancel actions */
+.form-actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+.cancel-link {
+    display: block;
+    margin-top: 1rem;
+    color: var(--text-light-color);
+    font-weight: 700;
+    text-decoration: none;
+}
+.cancel-link:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Error message styling */
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875em;
+    font-weight: bold;
+    margin-top: 0.25rem;
+    display: block;
+}

@@ -1,0 +1,136 @@
+/* ----------------------------- */
+/* --- SEARCH RESULTS STYLES --- */
+/* ----------------------------- */
+
+/* Header where the search form sits */
+.search-header {
+    background-color: var(--background-color);
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Main container for the results list */
+.results-container {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.results-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+/* Job list and card styles */
+.job-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.job-card {
+    position: relative; /* Anchor for the stretched-link */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-3px);
+    border-color: #cdd4da;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+}
+
+/* The stretched link makes the entire card clickable */
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+
+.job-card__info {
+    flex-grow: 1;
+}
+
+.job-card__title a {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    position: relative;
+    z-index: 2; /* Ensures the link is clickable over the ::after element */
+}
+.job-card__title a:hover {
+    color: var(--accent-color);
+}
+
+.job-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light-color);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+}
+.job-card__meta .separator {
+    color: var(--border-color);
+}
+
+.job-card__posted-date {
+    font-size: 0.85rem;
+    color: var(--text-light-color);
+    margin-top: 0.75rem;
+}
+
+.job-card__details {
+    flex-shrink: 0;
+    text-align: right;
+    z-index: 2; /* Ensures content is above the stretched-link */
+    position: relative;
+}
+
+.job-card__salary {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.job-card__type {
+    margin-top: 0.25rem;
+    display: inline-block;
+    background-color: #e7f6f5; /* Light teal background */
+    color: #008a81; /* Darker teal text */
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Empty state card for when there are no results */
+.card--empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: var(--surface-color);
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+}
+.card--empty h3 {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+}
+.card--empty p {
+    color: var(--text-light-color);
+    margin-top: 0.5rem;
+}

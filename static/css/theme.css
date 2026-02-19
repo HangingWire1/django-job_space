@@ -1,0 +1,99 @@
+/* --------------------------------- */
+/* --- MODERN & PROFESSIONAL THEME --- */
+/* --------------------------------- */
+
+:root {
+    /* Color Palette */
+    --primary-color: #0D2A4D;   /* Deep Navy Blue */
+    --accent-color: #00A79D;    /* Bright Teal */
+    --accent-hover: #008a81;
+    --background-color: #F8F9FA;/* Light Gray */
+    --surface-color: #FFFFFF;   /* White */
+    --text-color: #343A40;      /* Dark Gray */
+    --text-light-color: #6C757D;/* Lighter Gray for subtitles */
+    --border-color: #DEE2E6;    /* Light border color */
+
+    /* Typography */
+    --font-body: 'Lato', sans-serif;
+    --font-heading: 'Poppins', sans-serif;
+}
+
+/* General Body Styling */
+body {
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Header & Navbar Theme */
+.header {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar__logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.navbar__logo strong {
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.navbar__link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 4px;
+}
+.navbar__link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+.navbar__link:hover::after,
+.navbar__link.active::after {
+    width: 100%;
+}
+
+
+/* Button Theme */
+.btn--primary {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+.btn--primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+/* Footer Theme */
+.footer {
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+}
+.footer p {
+    color: var(--text-light-color);
+    font-size: 0.9rem;
+}
+.footer a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.footer a:hover {
+    color: var(--accent-color);
+}
+

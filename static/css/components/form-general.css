@@ -1,0 +1,147 @@
+/* -------------------------- */
+/* --- GENERAL FORM STYLING --- */
+/* -------------------------- */
+
+/* --- Page Header for Forms --- */
+.page-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.page-header__title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.page-header__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Main Form Container --- */
+.form-container {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Form Sections --- */
+.form-section {
+    margin-bottom: 1.5rem;
+}
+
+.form-section__title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 2.5rem 0;
+}
+
+/* --- Form Groups and Labels --- */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-label.required::after {
+    content: ' *';
+    color: #dc3545; /* Bootstrap's danger color for consistency */
+}
+
+/* --- General Input, Select, Textarea Styling --- */
+/* This targets all form inputs within your form */
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="number"],
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-container textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-container input:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 167, 157, 0.2); /* Soft glow with accent color */
+}
+
+/* --- Layout for side-by-side fields --- */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* --- Form Actions (Buttons) --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Default for single button */
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.form-actions--space-between {
+    justify-content: space-between; /* For cancel/submit pair */
+}
+
+/* Error message styling */
+.form-error {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* --- Alerts --- */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+/* Add other alert colors (danger, warning, info) as needed */

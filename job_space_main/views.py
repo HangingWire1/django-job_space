@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from job_posts.models import JobPost
 
 
 def home(request):
@@ -7,7 +8,14 @@ def home(request):
     if 'active_page' not in request.session:
         request.session['active_page'] = 'employee'
         request.session.set_expiry(None)
-    return render(request, 'home.html')
+
+    # Fetch, for example, the 5 most recently created jobs
+    recent_jobs = JobPost.objects.all().order_by('-created_at')[:5]
+    context = {
+        'recent_jobs': recent_jobs,
+    }
+    return render(request, 'home.html', context)
+
 
 @require_POST
 def active_page(request):

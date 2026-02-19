@@ -1,126 +1,96 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ job.title }} | Details{% endblock %}
+
+{% block title %}{{ job.title }} | jobSpace{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/job_details.css' %}">
+{% endblock %}
 
 {% block content %}
-<style>
-    .detail-container {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 20px;
-        background: #fff;
-        border: 1px solid #eee;
-        border-radius: 8px;
-    }
+<div class="container">
+    <div class="job-detail-layout">
 
-    .header-section {
-        border-bottom: 2px solid #f4f4f4;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-    }
+        <!-- Main Content Column (Left) -->
+        <div class="job-detail__main">
+            <header class="job-detail__header">
+                <h1 class="job-detail__title">{{ job.title }}</h1>
+                <p class="job-detail__subtitle">
+                    Posted {{ job.created_at|timesince }} ago by
+                    <a href="{% url 'view_employer_profile' job.employer.id 'about' %}">
+                        {{ job.employer.company_name }}
+                    </a>
+                </p>
+            </header>
 
-    .employer-link {
-        color: #00cec9;
-        text-decoration: none;
-        font-weight: bold;
-    }
+            <section class="job-detail__section">
+                <h2 class="section-title">Job Description</h2>
+                <div class="text-content">
+                    {{ job.description|linebreaksbr }}
+                </div>
+            </section>
 
-    .employer-link:hover {
-        text-decoration: underline;
-    }
+            <section class="job-detail__section">
+                <h2 class="section-title">Job Requirements</h2>
+                <div class="text-content">
+                    {{ job.requirements|linebreaksbr }}
+                </div>
+            </section>
+        </div>
 
-    .job-meta-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 30px;
-        background: #fdfdfd;
-        padding: 15px;
-        border-radius: 5px;
-    }
+        <!-- Sidebar Column (Right) -->
+        <aside class="job-detail__sidebar">
+            <div class="summary-card">
+                <div class="summary-card__apply-section">
+                    {% if user.is_employer %}
+                        <a href="{% url 'edit_job' job.slug %}" class="btn btn--primary btn--full-width btn--lg">
+                            Edit
+                        </a>
+                    {% elif has_applied %}
+                        <div class="status-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                            <span>Applied</span>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'apply_for_job' job_slug=job.slug %}" class="btn btn--primary btn--full-width btn--lg">
+                            Apply Now
+                        </a>
+                    {% endif %}
+                </div>
 
-    .section-title {
-        border-left: 4px solid #00cec9;
-        padding-left: 10px;
-        margin: 25px 0 15px 0;
-        font-size: 1.2rem;
-    }
+                <h3 class="summary-card__title">Job Overview</h3>
+                <ul class="summary-card__list">
+                    <li>
+                        <span class="label">Salary</span>
+                        <span class="value salary">{{ job.salary }} MMK</span>
+                    </li>
+                    <li>
+                        <span class="label">Job Type</span>
+                        <span class="value">{{ job.get_job_type_display }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Category</span>
+                        <span class="value">{{ job.category.name }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Location</span>
+                        <span class="value">{{ job.location.state.name }}, {{ job.location.township.name }}</span>
+                    </li>
+                    {% if job.contact_email %}
+                    <li>
+                        <span class="label">Contact</span>
+                        <span class="value">{{ job.contact_email }}</span>
+                    </li>
+                    {% endif %}
+                </ul>
 
-    .text-content {
-        line-height: 1.8;
-        white-space: pre-line; /* Preserves line breaks */
-        color: #444;
-    }
+                 <div class="detail-address-section">
+                    <h3 class="summary-card__title">Detail Address</h3>
+                    <p>{{ job.location.detail_address }}</p>
+                 </div>
+            </div>
+        </aside>
 
-    .apply-section {
-        margin-top: 40px;
-        text-align: center;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-    }
-
-    .btn-apply {
-        background-color: #2d3436;
-        color: white;
-        padding: 12px 40px;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1rem;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .applied-status {
-        background-color: #e1e1e1;
-        color: #636e72;
-        padding: 12px 40px;
-        border-radius: 5px;
-        font-weight: bold;
-        display: inline-block;
-    }
-</style>
-
-<div class="detail-container">
-    <div class="header-section">
-        <h1>{{ job.title }}</h1>
-        <p>
-            Posted: {{ job.created_at|timesince }} ago by
-            <a href="{% url 'view_employer_profile' job.employer.id 'about' %}" class="employer-link">
-                {{ job.employer.company_name }}
-            </a>
-        </p>
-    </div>
-
-    <div class="job-meta-grid">
-        <div><strong>Company:</strong> {{ job.company_name }}</div>
-        <div><strong>Type:</strong> {{ job.job_type }}</div>
-        <div><strong>Category:</strong> {{ job.category.name }}</div>
-        <div><strong>Salary:</strong> <span style="color: #00b894; font-weight: bold;">{{ job.salary }}</span></div>
-        <div><strong>Location:</strong> {{ job.location.state.name }}, {{ job.location.township.name }}</div>
-        {% if job.contact_email %}
-            <div><strong>Contact Email:</strong> {{ job.contact_email }}</div>
-        {% endif %}
-    </div>
-
-    <h3 class="section-title">Detail Address</h3>
-    <p class="text-content">{{ job.location.detail_address }}</p>
-
-    <h3 class="section-title">Job Description</h3>
-    <p class="text-content">{{ job.description }}</p>
-
-    <h3 class="section-title">Job Requirements</h3>
-    <p class="text-content">{{ job.requirements }}</p>
-
-    <div class="apply-section">
-<!--        {% if has_applied %}-->
-<!--            <span class="applied-status">Applied</span>-->
-<!--        {% else %}-->
-
-            <a href="{% url 'apply_for_job' job_slug=job.slug %}" class="btn btn-primary">
-                Apply Now
-            </a>
-
-<!--        {% endif %}-->
     </div>
 </div>
 {% endblock %}

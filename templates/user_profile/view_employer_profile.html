@@ -1,181 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ employer.company_name|default:"Company Profile" }}{% endblock %}
+
+{% block styles %}
+    {# We are using the same stylesheet as the employee profile, which has been enhanced #}
+    <link rel="stylesheet" href="{% static 'css/pages/profile_view.css' %}">
+{% endblock %}
+
 {% block content %}
-<style>
-/* ===== Layout ===== */
-.employer-container {
-  max-width: 1100px;
-  margin: 32px auto;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-}
+<div class="container">
+    <div class="profile-view-layout--full">
+        <!-- Profile Header -->
+        <header class="profile-header">
+            <div class="profile-header__logo">
+                {% if employer.company_logo %}
+                    <img src="{{ employer.company_logo.url }}" alt="Company logo for {{ employer.company_name }}">
+                {% else %}
+                    <span>logo</span>
+<!--                {{ employer.company_name|slice:":1" }}-->
+                {% endif %}
+            </div>
+            <div class="profile-header__info">
+                <h1 class="profile-header__name">{{ employer.company_name|default:"Company Name" }}</h1>
+                <!-- Profile Tabs -->
+                <nav class="profile-tabs">
+                    <a href="{% url 'view_employer_profile' employer.id 'about' %}" class="profile-tab {% if category == 'about' %}is-active{% endif %}">About Us</a>
+                    <a href="{% url 'view_employer_profile' employer.id 'jobs' %}" class="profile-tab {% if category == 'jobs' %}is-active{% endif %}">Open Jobs ({{ jobs.count }})</a>
+                </nav>
+            </div>
+        </header>
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.logo-wrapper {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.logo-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.company-name {
-  font-size: 32px;
-  font-weight: 700;
-}
-
-/* ===== Tabs ===== */
-.tabs {
-  margin-top: 16px;
-  display: flex;
-  gap: 12px;
-}
-
-.tab {
-  padding: 8px 18px;
-  background: #9c9c9c;
-  color: #000;
-  font-weight: 600;
-  border-radius: 2px;
-  text-decoration: none;
-}
-
-/* ===== Sections ===== */
-.section {
-  margin-top: 32px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-/* ===== Cards ===== */
-.card {
-  border: 1px solid #999;
-  padding: 16px 20px;
-  max-width: 520px;
-}
-
-/* ===== Key–Value layout ===== */
-.kv {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.k {
-  font-weight: 500;
-}
-
-.v {
-  font-weight: 600;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* ===== Muted ===== */
-.muted {
-  color: #666;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 900px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-    .details-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    max-width: 100%;
-  }
-}
-
-
-
-.details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: stretch;   /* key line */
-}
-
-.details-grid .col {
-  display: flex;
-  flex-direction: column;
-}
-
-.details-grid .card {
-  flex: 1;                /* makes cards equal height */
-}
-
-
-    /* consistent spacing for section titles above cards */
-.details-grid .section-title {
-  margin: 0 0 10px 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-
-
-
-
-</style>
-
-<div class="employer-container">
-
-  <!-- ===== Header ===== -->
-  <div class="header">
-    <div class="logo-wrapper">
-      {% if employer.company_logo %}
-        <img src="{{ employer.company_logo.url }}" alt="Company logo">
-      {% else %}
-        <span class="muted">company<br>profile</span>
-      {% endif %}
+        <!-- Main Content (Tabs) -->
+        <main class="profile-view__main">
+            {% if category == "jobs" %}
+                {% include "user_profile/includes/employer_profile_jobs.html" %}
+            {% else %}
+                {% include "user_profile/includes/employer_profile_about.html" %}
+            {% endif %}
+        </main>
     </div>
-
-    <div>
-      <div class="company-name">
-        {{ employer.company_name|default:"Company Name" }}
-      </div>
-
-      <div class="tabs">
-          <span class="tab">
-              <a href="{% url 'view_employer_profile' employer.id 'about' %}" style="text-decoration: none; color: inherit;">about</a>
-          </span>
-
-          <span class="tab">
-              <a href="{% url 'view_employer_profile' employer.id 'jobs' %}" style="text-decoration: none; color: inherit;">jobs</a>
-          </span>
-      </div>
-    </div>
-  </div>
-    {% if category == "jobs" %}
-        {% include "user_profile/includes/employer_profile_jobs.html" %}
-    {% else %}
-        {% include "user_profile/includes/employer_profile_about.html" %}
-    {% endif %}
 </div>
-
 {% endblock %}

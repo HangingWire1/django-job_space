@@ -14,7 +14,6 @@ urlpatterns = [
     # The action URL for the status change form.
     path('update-status/<int:application_id>/', views.update_application_status, name='update_application_status'),
     # ... your other urls
-    path('manage-applicants/', views.manage_applicants, name='manage_applicants'),
     path('update-status/<int:application_id>/', views.update_application_status, name='update_application_status'),
     path('application-details/<int:application_id>/', views.application_details, name='application_details'),
 ]

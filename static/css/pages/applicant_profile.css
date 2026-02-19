@@ -1,0 +1,162 @@
+/* ------------------------------- */
+/* --- APPLICANT PROFILE PAGE --- */
+/* ------------------------------- */
+
+/* --- Page Header --- */
+.applicant-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.applicant-header__name {
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+.applicant-header__job-title {
+    font-size: 1.2rem;
+    color: var(--text-light-color);
+}
+.applicant-header__job-title a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+.applicant-header__job-title a:hover {
+    text-decoration: underline;
+}
+
+/* --- Main Layout --- */
+.applicant-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+@media (min-width: 992px) {
+    .applicant-layout {
+        grid-template-columns: 320px 1fr; /* Sidebar and main content */
+    }
+}
+
+/* --- Left Sidebar (Contact Info) --- */
+.applicant-sidebar {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+}
+@media (min-width: 992px) {
+    .applicant-sidebar {
+        position: sticky;
+        top: 90px; /* Header height + 20px */
+    }
+}
+
+.applicant-sidebar__photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.applicant-sidebar__contact-list {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    padding: 0;
+}
+.applicant-sidebar__contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+.applicant-sidebar__contact-item i {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+}
+
+.applicant-sidebar__socials {
+    text-align: left;
+}
+.applicant-sidebar__socials h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--primary-color);
+}
+.applicant-sidebar__socials a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+}
+.applicant-sidebar__socials a:hover {
+    color: var(--accent-color);
+}
+
+
+/* --- Right Column (Main Content) --- */
+.applicant-main {
+    /* Styles for the main content area if needed */
+}
+
+.content-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+.content-card__header {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.content-card__body {
+    padding: 1.5rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+.content-card__body p:last-child {
+    margin-bottom: 0;
+}
+
+/* Specific list styles */
+.content-card__list {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+.content-card__list-item {
+    margin-bottom: 1rem;
+}
+.content-card__list-item strong {
+    font-weight: 600;
+    color: var(--primary-color);
+    display: block;
+}
+
+/* Skill Chips */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.skill-chip {
+    background-color: #e9ecef;
+    color: var(--text-color);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
