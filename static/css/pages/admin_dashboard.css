@@ -1,0 +1,99 @@
+/* -------------------------- */
+/* --- ADMIN DASHBOARD V1 --- */
+/* -------------------------- */
+
+/* --- Main Layout --- */
+.admin-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr; /* Fixed sidebar, flexible content */
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* --- Sidebar Navigation --- */
+.admin-sidebar {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    position: sticky;
+    top: 90px; /* Adjust based on your header height */
+}
+
+.admin-sidebar__link {
+    display: block;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-sidebar__link:hover {
+    background-color: #e9ecef; /* Light background on hover */
+}
+
+.admin-sidebar__link.is-active {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 600;
+}
+
+/* --- Main Content Area --- */
+.admin-main {
+    /* Main content area takes up remaining space */
+}
+
+.user-info-banner {
+    background-color: #e2e8f0; /* A soft blue-gray */
+    color: var(--primary-color);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.user-info-banner b {
+    font-weight: 600;
+}
+.user-info-banner .badge {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.3em 0.6em;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+/* --- Stat Card Grid --- */
+.stat-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    border-bottom: 4px solid; /* Colored accent border */
+    text-align: center;
+}
+.stat-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+.stat-card__value {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--primary-color);
+}
+
+/* Color variations for the bottom border */
+.stat-card--employees { border-bottom-color: #0d6efd; } /* Blue */
+.stat-card--employers { border-bottom-color: #198754; } /* Green */
+.stat-card--jobs { border-bottom-color: #ffc107; }    /* Yellow */

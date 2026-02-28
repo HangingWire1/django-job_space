@@ -5,49 +5,56 @@
 
 {% block styles %}
     {{ block.super }}
-    {# New stylesheet for the job cards and list page #}
     <link rel="stylesheet" href="{% static 'css/components/card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/my_posts.css' %}">
 {% endblock styles %}
 
 {% block content %}
 <div class="container">
 
-    <div class="page-header">
+    <header class="page-header">
         <h1 class="page-header__title">My Posts</h1>
-        <p class="page-header__subtitle">A list of all the jobs you have published.</p>
-    </div>
+        <p class="page-header__subtitle">A list of all the jobs you have published or saved as drafts.</p>
+    </header>
 
-<!--    {% if messages %}-->
-<!--      {% for message in messages %}-->
-<!--        <div class="alert alert-success">{{ message }}</div>-->
-<!--      {% endfor %}-->
-<!--    {% endif %}-->
+    {% if jobs %}
+        <div class="job-post-list">
+            {% for job in jobs %}
+            {# The status class on the card allows for specific styling (e.g., left border color) #}
+            <div class="card-job card-job--{{ job.status }}">
+                <div class="card-body">
+                    <div class="card-job__info">
+                        {# The `stretched-link` makes the whole card clickable, pointing to this URL #}
+                        <a href="{% url 'job_details' job.slug %}" class="card-job__title stretched-link">{{ job.title }}</a>
+                        <div class="card-job__meta">
+                            {{ job.get_job_type_display }}<span>•</span>Posted: {{ job.created_at|date:"M d, Y" }}
+                        </div>
+                    </div>
 
-    {% for job in jobs %}
-        <div class="card-job">
-            <div class="card-job__info">
-                <a href="{% url 'job_details' job.slug %}" class="card-job__title">{{ job.title }}</a>
-                <div class="card-job__meta">
-                    {{ job.get_job_type_display }}<span>•</span>{{ job.created_at|date:"M d, Y" }}
+                    <div class="card-job__actions">
+                        <div class="status-badge status-badge--{{ job.status }}">
+                            {{ job.get_status_display }}
+                        </div>
+
+                        {# These buttons need a higher z-index to be clickable over the stretched link #}
+                        <div class="button-group" style="position: relative; z-index: 2;">
+                            <a href="{% url 'edit_job' job.slug %}" class="btn btn--secondary btn--sm">Edit</a>
+
+                            <form action="{% url 'archive_job' job.slug %}" method="post" onsubmit="return confirm('Archive this job? It will be hidden from public view.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn--secondary-outline btn--sm">Archive</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="card-job__actions">
-                <a href="{% url 'edit_job' job.slug %}" class="btn btn--secondary btn--small">Edit</a>
-
-                <form action="{% url 'delete_job' job.slug %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn--danger btn--small"
-                        onclick="return confirm('Are you sure you want to delete this job post?')">
-                        Delete
-                    </button>
-                </form>
-            </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <div class="notice-empty">
-            You haven't posted any jobs yet.
+    {% else %}
+        <div class="notice-empty" style="margin-top: 2rem;">
+            You haven't posted any jobs yet. <a href="{% url 'post_job' %}" class="btn btn--primary" style="margin-left: 1rem;">Post Job</a>
         </div>
-    {% endfor %}
+    {% endif %}
+
 </div>
 {% endblock content %}

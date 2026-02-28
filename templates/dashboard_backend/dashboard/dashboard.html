@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        {% include 'dashboard/sidebar.html' %}
+
+        <div class="col-md-9">
+            <div class="alert alert-info">
+                Logged in as <b>{{ user.email }}</b> with
+                {% for group in user.groups.all %}
+                    <span class="badge bg-dark">{{ group.name }}</span>
+                {% endfor %}
+                permission
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Employees</h5>
+                            <h2 class="display-4">{{ employee_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Employers</h5>
+                            <h2 class="display-4">{{ employer_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Job Posts</h5>
+                            <h2 class="display-4">{{ post_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

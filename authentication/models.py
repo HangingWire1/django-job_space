@@ -16,12 +16,20 @@ class User(AbstractUser):
 class State(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
 
 class Township(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='townships')
     name = models.CharField(max_length=100)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('state', 'name') # Prevents duplicate townships in the same state

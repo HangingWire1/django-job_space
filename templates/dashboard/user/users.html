@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/admin_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-layout">
+
+        <aside class="admin-sidebar-container">
+            {% include 'dashboard/sidebar.html' %}
+        </aside>
+
+        <main class="admin-main">
+            {% if perms.authentication.view_user %}
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 class="page-header__title" style="margin-bottom: 0;">All Users</h2>
+                <a href="{% url 'add_user' %}" class="btn btn--primary">Add User</a>
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2.5rem;">
+                <form method="GET" action="" class="search-form" style="margin: 0; flex-grow: 1;">
+                    <div class="search-form__field-group">
+                        <i class="bi bi-search search-form__icon" style="top: 50%; transform: translateY(-50%);"></i>
+                        <input type="text" name="q" class="search-form__input" placeholder="Search by name or email..." value="{{ search_query }}">
+                    </div>
+
+                    <div class="search-form__field-group">
+                        <select name="user_type" class="search-form__input">
+                            <option value="">All User Types</option>
+                            <option value="employee" {% if user_type == 'employee' %}selected{% endif %}>Employee</option>
+                            <option value="employer" {% if user_type == 'employer' %}selected{% endif %}>Employer</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="search-form__button">Filter</button>
+                </form>
+                <a href="{% url 'users' %}" class="btn" style="background-color: #e9ecef; color: var(--text-color);">Clear</a>
+            </div>
+
+            <div style="background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                  <thead style="background-color: var(--background-color); border-bottom: 2px solid var(--border-color);">
+                    <tr>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color);">#</th>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color);">User Type</th>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color);">Name</th>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color);">Email</th>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color);">Staff role</th>
+                        <th style="padding: 1rem; font-family: var(--font-heading); font-weight: 500; color: var(--text-light-color); text-align: center;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for user in users %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background-color 0.2s;">
+                        <td style="padding: 1rem;">{{ forloop.counter }}</td>
+
+                        <td style="padding: 1rem;">
+                            {% if user.is_employee %}
+                                <span style="background-color: #e2e8f0; color: var(--primary-color); padding: 0.3em 0.6em; border-radius: 6px; font-size: 0.85em; font-weight: 600;">Employee</span>
+                            {% elif user.is_employer %}
+                                <span style="background-color: #d1e7dd; color: #198754; padding: 0.3em 0.6em; border-radius: 6px; font-size: 0.85em; font-weight: 600;">Employer</span>
+                            {% else %}
+                                <span style="background-color: #f8f9fa; color: var(--text-light-color); padding: 0.3em 0.6em; border-radius: 6px; font-size: 0.85em;">Undefined</span>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 1rem; font-weight: 600; color: var(--primary-color);">
+                            {% if user.is_employee %}
+                                {{ user.employee.employee_name }}
+                            {% elif user.is_employer %}
+                                {{ user.employer.company_name }}
+                            {% else %}
+                                <span style="color: var(--text-light-color); font-weight: normal; font-style: italic;">No Name Assigned</span>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 1rem;">{{ user.email }}</td>
+
+                        <td style="padding: 1rem;">
+                        {% if user.groups.all %}
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'Manager' %}
+                                    <span style="background-color: var(--primary-color); color: white; padding: 0.3em 0.6em; border-radius: 6px; font-size: 0.85em;">Manager</span>
+                                {% elif group.name == 'Editor' %}
+                                    <span style="background-color: var(--accent-color); color: white; padding: 0.3em 0.6em; border-radius: 6px; font-size: 0.85em;">Editor</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <span style="color: var(--text-light-color);">None</span>
+                        {% endif %}
+                        </td>
+
+                        <td style="padding: 1rem; text-align: center;">
+                            <a href="{% url 'edit_user' user.id %}" title="Edit" style="color: var(--primary-color); margin-right: 0.75rem; font-size: 1.1rem; text-decoration: none;">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{% url 'delete_user' user.id %}" title="Delete" onclick="return confirm('Are you sure you want to delete this user?')" style="color: #dc3545; font-size: 1.1rem; text-decoration: none;">
+                                <i class="bi bi-trash3-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <div class="user-info-banner" style="background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7;">
+                <i class="bi bi-shield-lock-fill"></i> <b>Access Denied:</b> You don't have permission to view the page.
+            </div>
+            {% endif %}
+        </main>
+
+    </div>
+</div>
+{% endblock %}

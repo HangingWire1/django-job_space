@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/form-general.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-layout">
+
+        <aside class="admin-sidebar-container">
+            {% include 'dashboard/sidebar.html' %}
+        </aside>
+
+        <main class="admin-main">
+
+            <header class="page-header">
+                <h2 class="page-header__title">Edit Location</h2>
+                <p class="page-header__subtitle">Modify the state name or manage its associated townships.</p>
+            </header>
+
+            <div class="form-container" style="max-width: 650px;">
+                <form action="{% url 'edit_state' state.id %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" style="background-color: #f8d7da; color: #842029; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="form-label required" for="{{ form.name.id_for_label }}">
+                                {{ form.name.label }}
+                            </label>
+
+                            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                                <div style="flex-grow: 1;">
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                        <div class="form-error">{{ form.name.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <a href="{% url 'townships' state.id %}"
+                                   class="btn"
+                                   style="background-color: var(--accent-color); color: white; white-space: nowrap; padding: 0.65rem 1rem;">
+                                   <i class="bi bi-geo-alt"></i> Edit Townships
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions form-actions--space-between">
+                        <a href="{% url 'states' %}" class="btn" style="background-color: transparent; color: var(--text-light-color); border: 1px solid var(--border-color);">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn--primary">Update State</button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+/* --------------------------------- */
+/* --- MY POSTS PAGE & JOB CARDS --- */
+/* --------------------------------- */
+
+/* --- Page Header (if you need specific adjustments) --- */
+/* This can often be inherited from form-general.css or other page styles */
+/* If not, you can copy the .page-header styles here. */
+.page-header {
+    margin-bottom: 2.5rem;
+    text-align: left; /* My Posts is better left-aligned */
+}
+.page-header__title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+.page-header__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+}
+
+/* --- Job List Container --- */
+.job-post-list {
+    display: grid;
+    gap: 1.25rem;
+}
+
+/* --- Card Body Modifications for this page --- */
+/* We'll use flexbox inside the card now */
+.card-job .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* --- Status Badge Styling --- */
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 80px; /* Gives badges a consistent minimum size */
+}
+
+/* --- Badge Color Variations --- */
+.status-badge--published {
+    background-color: #d1e7dd; /* Light green */
+    color: #0f5132;      /* Dark green */
+}
+.status-badge--draft {
+    background-color: #e9ecef;  /* Light gray */
+    color: #495057;       /* Dark gray */
+}
+.status-badge--archived {
+    background-color: #f8d7da; /* Light red */
+    color: #842029;      /* Dark red */
+}
+
+
+/* --- Card Status Variations --- */
+/* Add a left border to indicate status visually */
+.card-job {
+    border-left-width: 5px;
+}
+.card-job--published {
+    border-left-color: #198754; /* Green for published */
+}
+.card-job--draft {
+    border-left-color: var(--text-light-color); /* Gray for draft */
+    opacity: 0.8; /* Make drafts slightly faded */
+}
+.card-job--draft:hover {
+    opacity: 1;
+}
+
+/* --- Action Button Styling --- */
+.card-job__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Space between status and buttons */
+    flex-shrink: 0;
+}
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* A new button style for secondary actions like 'Archive' */
+.btn--secondary-outline {
+    background-color: transparent;
+    color: var(--text-light-color);
+    border-color: var(--border-color);
+}
+.btn--secondary-outline:hover {
+    background-color: #f8f9fa;
+    color: #dc3545; /* Make it red on hover to indicate a destructive action */
+    border-color: #dc3545;
+}
+
+/* --- Stretched Link --- */
+/* This is a Bootstrap concept. We need to make sure the card is 'relative'
+   for the link to fill the whole card click area. */
+.card-job {
+    position: relative;
+}
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}

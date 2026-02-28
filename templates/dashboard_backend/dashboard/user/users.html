@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+<!--        left sidebar-->
+        {% include 'dashboard/sidebar.html' %}
+<!--        right side content-->
+        <div class="col-md-9">
+            {% if perms.authentication.view_user %}
+            <h2>All Users</h2>
+            <a href="{% url 'add_user' %}" class="btn btn-dark text-light float-right mb-2">Add User</a>
+
+<!--            search filter form-->
+            <form method="GET" action="" class="row mb-4">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search by name or email..." value="{{ search_query }}">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="user_type" class="form-control">
+                        <option value="">All User Types</option>
+                        <option value="employee" {% if user_type == 'employee' %}selected{% endif %}>Employee</option>
+                        <option value="employer" {% if user_type == 'employer' %}selected{% endif %}>Employer</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{% url 'users' %}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                    <th>User Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Staff role</th>
+                    <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        {% if user.is_employee %}
+                            employee
+                        {% elif user.is_employer %}
+                            employer
+                        {% else %}
+                            Undefined
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_employee %}
+                            {{ user.employee.employee_name }}
+                        {% elif user.is_employer %}
+                            {{ user.employer.company_name }}
+                        {% else %}
+                            No Name Assigned
+                        {% endif %}
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                    {% if user.groups.all %}
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Manager' %}
+                                Manager
+                            {% elif group.name == 'Editor' %}
+                                Editor
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        None
+                    {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'edit_user' user.id %}" class="btn-icon text-primary" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <a href="{% url 'delete_user' user.id %}" class="btn-icon text-danger" title="Delete"
+                           onclick="return confirm('Are you sure you want to delete this category?')">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <h5>You don't have permission to view the page</h5>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

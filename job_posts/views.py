@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from applications.models import Application
 from authentication.models import Township, State, Location, Employer, Employee
@@ -114,22 +115,38 @@ def post_job(request):
 
 @login_required
 def jobs_list(request):
-    employer = request.user.employer  # adjust if your relation is different
-    jobs = JobPost.objects.filter(employer=employer)
+    try:
+        employer = request.user.employer
+    except AttributeError:
+        # Handle cases where the user is not an employer
+        # Or you can use a permission mixin
+        jobs = JobPost.objects.none()
+    else:
+        # Fetch only non-archived jobs for the employer, ordered by most recent
+        jobs = JobPost.objects.filter(employer=employer, is_archived=False).order_by('-created_at')
 
     return render(request, 'job_posts/jobs_list.html', {'jobs': jobs})
 
+@require_POST # Ensures this view only accepts POST requests
 @login_required
-def delete_job(request, slug):
-    employer = request.user.employer
-    job = get_object_or_404(JobPost, slug=slug, employer=employer)
+def archive_job(request, job_slug):
+    # Safely get the job post object
+    job = get_object_or_404(JobPost, slug=job_slug)
 
-    if request.method == "POST":
-        job.delete()
-        messages.success(request, "Job deleted successfully.")
-        return redirect('jobs_list')
+    # Security check: Ensure the job belongs to the logged-in employer
+    if job.employer != request.user.employer:
+        messages.error(request, "You do not have permission to archive this job.")
+        return redirect('jobs_list') # Redirect to the main list
 
-    return render(request, 'jobs_list', {'job': job})
+    # Set the archived flag to True and save the object
+    job.is_archived = True
+    job.save()
+
+    # Add a success message for user feedback
+    messages.success(request, f"The job post '{job.title}' has been successfully archived.")
+
+    # Redirect back to the list of jobs
+    return redirect('jobs_list')
 
 @login_required
 def edit_job(request, slug):
@@ -168,3 +185,15 @@ def edit_job(request, slug):
         })
 
     return render(request, 'job_posts/edit_job.html', {'form': form, 'job': job})
+
+@login_required
+def delete_job(request, slug):
+    employer = request.user.employer
+    job = get_object_or_404(JobPost, slug=slug, employer=employer)
+
+    if request.method == "POST":
+        job.delete()
+        messages.success(request, "Job deleted successfully.")
+        return redirect('jobs_list')
+
+    return render(request, 'jobs_list', {'job': job})

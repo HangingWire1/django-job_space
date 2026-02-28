@@ -10,6 +10,7 @@ urlpatterns = [
     path('job_details/<slug:job_slug>/',views.job_details,name='job_details'),
     path('post_job/',views.post_job,name='post_job'),
     path('jobs_list/',views.jobs_list,name='jobs_list'),
-    path('delete_job/<slug:slug>/', views.delete_job, name='delete_job'),
+    # path('delete_job/<slug:slug>/', views.delete_job, name='delete_job'),
+    path('jobs_list/<slug:job_slug>/archive/', views.archive_job, name='archive_job'),
     path('edit_job/<slug:slug>/', views.edit_job, name='edit_job'),
 ]
