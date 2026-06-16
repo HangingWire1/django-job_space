@@ -1,0 +1,83 @@
+/* --- PROFILE EDIT STYLES --- */
+.page-header {
+    text-align: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+.page-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+.page-header__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-color);
+    margin-top: 0.5rem;
+}
+.profile-edit-container { max-width: 900px; margin: 0 auto 4rem auto; }
+
+/* Form Cards */
+.form-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+.form-card__header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-card__header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+}
+.form-card__body { padding: 1.5rem; }
+.form-card__body .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 768px) {
+    .form-card__body .form-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.profile-pic-preview {
+    max-height: 120px;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+.current-file-link { font-size: 0.9rem; margin-top: 0.5rem; display: block; }
+
+/* Dynamic JSON Fields */
+.dynamic-list { display: grid; gap: 1rem; }
+.dynamic-list__item { display: flex; gap: 0.75rem; align-items: flex-start; }
+.dynamic-list__item textarea, .dynamic-list__item input { flex-grow: 1; }
+.dynamic-list__item .key-value-group { display: flex; flex-grow: 1; gap: 0.75rem; }
+
+/* Skill Chips */
+.skills-input-group { display: flex; gap: 0.5rem; align-items: center; }
+.skills-input-group input { flex-grow: 1; }
+.skills-list { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.skill-chip:hover { background-color: #dc3545; }
+.skill-chip::after { content: '×'; font-weight: bold; }

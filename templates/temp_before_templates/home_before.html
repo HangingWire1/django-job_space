@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home | JobBoard{% endblock %}
+
+{% block content %}
+
+{% if active_page == 'employee' %}
+<div class="hero-container">
+    <h1>Find your next opportunity</h1>
+
+    {% include "includes/search_form.html" %}
+</div>
+
+<!-- Recent Jobs Section -->
+<div class="recent-jobs-container" style="margin-top: 40px;">
+    <h2>Recent Job Posts</h2>
+    <div class="job-list">
+        {% for job in recent_jobs %}
+            <div class="job-card d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'job_details' job.slug %}" class="job-title">{{ job.title }}</a>
+                    <div class="job-meta">
+                        {{ job.get_job_type_display }} • {{ job.company.name }} • {{ job.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+                <div>
+                    <a href="{% url 'job_details' job.slug %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="text-center">
+                <p>No recent jobs have been posted yet. Please check back later!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<div class="hero-container">
+    <div class="employer-cta" role="region" aria-label="Employer quick actions">
+        <div class="cta-left">
+            <h2>Hire great people — faster</h2>
+            <p>
+                Create a clear job listing, manage your active posts, and review applicants in one place.
+                Posting a job takes less than a minute.
+            </p>
+
+            <div class="cta-actions">
+                <a class="btn-cta" href="{% url 'post_job' %}">
+                    <!-- simple SVG plus icon -->
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Post a Job
+                </a>
+
+                <a class="btn-secondary" href="{% url 'jobs_list' %}">My posts</a>
+            </div>
+
+            <div class="small-features" aria-hidden="true">
+                <div class="feature">⚡ Quick posting</div>
+                <div class="feature">🗂️ Manage listings</div>
+                <div class="feature">📩 Review applicants</div>
+            </div>
+        </div>
+
+        <div class="cta-right">
+            <div class="cta-illustration" aria-hidden="true">
+                <!-- compact illustration: briefcase -->
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="7" width="18" height="12" rx="2" stroke="#00cec9" stroke-width="1.5"/>
+                    <path d="M8 7V6a4 4 0 0 1 8 0v1" stroke="#00cec9" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

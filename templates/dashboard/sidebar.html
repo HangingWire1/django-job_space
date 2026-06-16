@@ -1,0 +1,22 @@
+<nav class="admin-sidebar">
+    {# The active state is now handled by adding the 'is-active' class #}
+    <a href="{% url 'dashboard' %}" class="admin-sidebar__link {% if '/dashboard/' == request.path %}is-active{% endif %}">
+        Dashboard
+    </a>
+    <a href="{% url 'users' %}" class="admin-sidebar__link {% if '/users/' in request.path %}is-active{% endif %}">
+        Users
+    </a>
+    <a href="{% url 'categories' %}" class="admin-sidebar__link {% if '/categories/' in request.path %}is-active{% endif %}">
+        Categories
+    </a>
+    <a href="{% url 'posts' %}" class="admin-sidebar__link {% if '/posts/' in request.path %}is-active{% endif %}">
+        Posts
+    </a>
+    <a href="{% url 'states' %}" class="admin-sidebar__link {% if '/states/' in request.path %}is-active{% endif %}">
+        Locations
+    </a>
+    {# I've assumed a URL name for logout based on our previous conversations #}
+    <a href="{% url 'user_logout' %}" class="admin-sidebar__link">
+        Logout
+    </a>
+</nav>

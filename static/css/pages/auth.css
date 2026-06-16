@@ -1,0 +1,106 @@
+/* --------------------------------- */
+/* --- AUTHENTICATION PAGE STYLES --- */
+/* (For Login & Registration)      */
+/* --------------------------------- */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 3rem 1.5rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--surface-color);
+    padding: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.auth-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* --- Crispy Forms Styling --- */
+
+.auth-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-form label {
+    display: block;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Style for all text, email, password inputs, and select elements from Crispy */
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form select.select {
+    width: 100%;
+    height: 44px;
+    padding: 0 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--surface-color);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form input:focus,
+.auth-form select.select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 167, 157, 0.1);
+}
+
+/* Help text styling */
+.auth-form .form-text,
+.auth-form .text-muted {
+    font-size: 0.85rem;
+    color: var(--text-light-color);
+    margin-top: 0.25rem;
+}
+
+/* Button utility */
+.btn--full-width {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 12px;
+}
+
+/* --- Footer Link --- */
+
+.auth-card__footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.auth-card__footer p {
+    margin: 0;
+    color: var(--text-light-color);
+}
+
+.auth-card__footer a {
+    color: var(--accent-color);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-card__footer a:hover {
+    text-decoration: underline;
+}

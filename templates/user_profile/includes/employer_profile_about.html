@@ -1,0 +1,30 @@
+<div class="about-grid">
+    <!-- Left Column -->
+    <div class="about-grid__main">
+        <div class="detail-card">
+            <h2 class="detail-card__title">What We Do</h2>
+            <div class="text-content">{{ employer.what_we_do|linebreaksbr|default:"No information provided." }}</div>
+        </div>
+        <div class="detail-card">
+            <h2 class="detail-card__title">Why You Should Join Us</h2>
+            <div class="text-content">{{ employer.why_join_us|linebreaksbr|default:"No information provided." }}</div>
+        </div>
+        <div class="detail-card">
+            <h2 class="detail-card__title">Our Mission & Vision</h2>
+            <div class="text-content">{{ employer.mission_vision|linebreaksbr|default:"No information provided." }}</div>
+        </div>
+    </div>
+    <!-- Right Sidebar -->
+    <aside class="about-grid__sidebar">
+        <div class="summary-card">
+            <h3 class="summary-card__title">Company Details</h3>
+            <ul class="summary-card__list">
+                <li><span class="label">Industry</span><span class="value">{{ employer.industry|default:"-" }}</span></li>
+                <li><span class="label">Founded</span><span class="value">{% if employer.founded_at %}{{ employer.founded_at|date:"Y" }}{% else %}-{% endif %}</span></li>
+                <li><span class="label">Employees</span><span class="value">{{ employer.get_no_of_employee_display }}</span></li>
+                <li><span class="label">Contact</span><span class="value">{{ employer.contact_email|default:"-" }}</span></li>
+                <li><span class="label">Address</span><span class="value">{{ employer.location.detail_address|default:"-" }}<br>{{ employer.location.township.name|default:"-" }}, {{ employer.location.state.name|default:"-" }}</span></li>
+            </ul>
+        </div>
+    </aside>
+</div>

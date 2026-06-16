@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block styles %}
+    {# Reusing auth styles for consistent form elements #}
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+    {# New, specific styles for the profile editing pages #}
+    <link rel="stylesheet" href="{% static 'css/pages/profile_edit.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Edit Your Profile</h1>
+        <p class="page-header__subtitle">Keep your information up-to-date to attract the right opportunities.</p>
+    </header>
+
+    <div class="profile-edit-container">
+        {% if user.is_employee %}
+            {% include "user_profile/includes/edit_employee_profile.html" %}
+        {% else %}
+            {% include "user_profile/includes/edit_employer_profile.html" %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {# The dependent dropdown script is already in base.html #}
+    {# New JavaScript file to handle dynamic fields like experience, skills, etc. #}
+    <script src="{% static 'js/profile_edit.js' %}"></script>
+{% endblock %}

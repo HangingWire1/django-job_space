@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Application: {{ application.employee_name }}{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/pages/applicant_profile.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <header class="applicant-header">
+        <h1 class="applicant-header__name">{{ application.employee_name }}</h1>
+        <p class="applicant-header__job-title">
+            Application for <a href="{% url 'job_details' job_slug=application.job.slug %}">{{ application.job.title }}</a>
+        </p>
+    </header>
+
+    <div class="applicant-layout">
+        <!-- ===== LEFT COLUMN (CONTACT & QUICK INFO) ===== -->
+        <aside class="applicant-sidebar">
+            <!-- Profile Photo -->
+            {% if application.employee and application.employee.profile_pic %}
+                <img src="{{ application.employee.profile_pic.url }}" alt="{{ application.employee.employee_name }}" class="applicant-sidebar__photo">
+            {% else %}
+                {# A placeholder SVG could be used here from your static files if you have one #}
+                <i class="bi bi-person-circle" style="font-size: 150px; color: #dee2e6;"></i>
+            {% endif %}
+
+            <!-- Contact Details -->
+            <ul class="applicant-sidebar__contact-list">
+                <li class="applicant-sidebar__contact-item"><i class="bi bi-geo-alt-fill"></i> {{ application.township }}, {{ application.state }}</li>
+                <li class="applicant-sidebar__contact-item"><i class="bi bi-envelope-fill"></i> {{ application.email }}</li>
+                {% if application.phone %}<li class="applicant-sidebar__contact-item"><i class="bi bi-telephone-fill"></i> {{ application.phone }}</li>{% endif %}
+                {% if application.salary_expect %}<li class="applicant-sidebar__contact-item"><i class="bi bi-cash-coin"></i> Expects: ${{ application.salary_expect|floatformat:2 }}</li>{% endif %}
+            </ul>
+
+            <!-- CV Download Button -->
+            {% if application.cv_file %}
+                <a href="{{ application.cv_file.url }}" target="_blank" class="btn btn--primary" style="width: 100%; margin-bottom: 1.5rem;">Download CV</a>
+            {% else %}
+                <p class="text-light-color" style="font-size: 0.9rem;">No CV was submitted.</p>
+            {% endif %}
+
+            <!-- Social Media Links -->
+            {% if application.social_media %}
+            <div class="applicant-sidebar__socials">
+                <h6>Social Media</h6>
+                <hr style="margin-top: 0.5rem;">
+                {% for platform, url in application.social_media.items %}
+                    <a href="{{ url }}" target="_blank">
+                        <i class="bi bi-{{ platform|lower }}"></i> {{ platform|title }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </aside>
+
+        <!-- ===== RIGHT COLUMN (APPLICATION CONTENT) ===== -->
+        <main class="applicant-main">
+            <!-- Cover Letter -->
+            {% if application.cover_letter %}
+            <div class="content-card">
+                <div class="content-card__header">Cover Letter</div>
+                <div class="content-card__body">
+                    {{ application.cover_letter|linebreaksbr }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Work Experience -->
+            <div class="content-card">
+                <div class="content-card__header">Work Experience</div>
+                <div class="content-card__body">
+                    {% if application.experience %}
+                        <ol class="content-card__list">
+                            {% for exp_item in application.experience %}
+                                <li class="content-card__list-item">
+                                    <strong>{{ exp_item }}</strong>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <p class="text-light-color">No experience records were submitted.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="content-card">
+                <div class="content-card__header">Education</div>
+                <div class="content-card__body">
+                    {% if application.education %}
+                        <ul class="content-card__list" style="list-style-type: none; padding-left: 0;">
+                            {% for edu_item in application.education %}
+                                <li class="content-card__list-item" style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="bi bi-mortarboard" style="color: var(--accent-color);"></i>
+                                    <span>{{ edu_item }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-light-color">No education records were submitted.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="content-card">
+                <div class="content-card__header">Skills</div>
+                <div class="content-card__body">
+                    {% if application.skills %}
+                        <div class="skills-container">
+                            {% for skill in application.skills %}
+                                <span class="skill-chip">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-light-color">No skills were listed.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

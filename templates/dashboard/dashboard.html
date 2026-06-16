@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/admin_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-layout">
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar-container">
+            {% include 'dashboard/sidebar.html' %}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="user-info-banner">
+                Logged in as <b>{{ user.email }}</b> with
+                {% for group in user.groups.all %}
+                    <span class="badge">{{ group.name }}</span>
+                {% endfor %}
+                permission.
+            </div>
+
+            <div class="stat-card-grid">
+                <div class="stat-card stat-card--employees">
+                    <h5 class="stat-card__title">Employees</h5>
+                    <p class="stat-card__value">{{ employee_count }}</p>
+                </div>
+
+                <div class="stat-card stat-card--employers">
+                    <h5 class="stat-card__title">Employers</h5>
+                    <p class="stat-card__value">{{ employer_count }}</p>
+                </div>
+
+                <div class="stat-card stat-card--jobs">
+                    <h5 class="stat-card__title">Job Posts</h5>
+                    <p class="stat-card__value">{{ post_count }}</p>
+                </div>
+            </div>
+        </main>
+
+    </div>
+</div>
+{% endblock %}

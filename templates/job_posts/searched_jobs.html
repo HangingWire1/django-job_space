@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/search_results.css' %}">
+{% endblock %}
+
+{% block content %}
+<header class="search-header">
+    <div class="container">
+        {# This now includes the full search form with the Township field #}
+        {% include "includes/search_form.html" %}
+    </div>
+</header>
+
+<div class="container">
+    <div class="results-container">
+        <h1 class="results-title">Search Results ({{ jobs.count }})</h1>
+
+        <div class="job-list">
+            {% for job in jobs %}
+            <div class="job-card">
+                <div class="job-card__info">
+                    <h3 class="job-card__title">
+                        <a href="{% url 'job_details' job.slug %}" class="stretched-link">{{ job.title }}</a>
+                    </h3>
+                    <div class="job-card__meta">
+                        <span>{{ job.employer.company_name }}</span>
+                        <span class="separator">&bull;</span>
+                        <span>{{ job.location.state.name }}</span>
+                    </div>
+                    <div class="job-card__posted-date">
+                        Posted: {{ job.created_at|timesince }} ago
+                    </div>
+                </div>
+
+                <div class="job-card__details">
+                    <div class="job-card__salary">{{ job.salary }} MMK</div>
+                    <div class="job-card__type">{{ job.get_job_type_display }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card--empty">
+                <h3>No jobs found for your search.</h3>
+                <p>Try broadening your criteria or using different keywords.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{# The scripts for the dropdown are already in base.html, so they are not needed here to avoid loading them twice. #}
+
+{% endblock %}

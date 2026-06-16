@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+    <div class="row">
+<!--        left sidebar-->
+        {% include 'dashboard/sidebar.html' %}
+<!--        right side content-->
+        <div class="col-md-9">
+            <h2>Edit Location</h2>
+                <form action="{% url 'edit_state' state.id %}" method="POST" style="width:500px;">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            {{ form.name.label }}
+                        </label>
+
+                        <div class="d-flex">
+                            {{ form.name }}
+                            <a href="{% url 'townships' state.id %}"
+                               class="btn btn-info ms-2">
+                               Edit Township
+                            </a>
+                        </div>
+
+                        {{ form.name.errors }}
+                    </div>
+                    <button type="submit" class="btn btn-warning">Submit</button>
+                </form>
+            <br>
+        </div>
+    </div>
+{% endblock %}

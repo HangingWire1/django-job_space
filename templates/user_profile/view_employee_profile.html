@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ employee.employee_name|default:"Employee Profile" }}{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/profile_view.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-view-layout">
+
+        <!-- Left Sidebar: Picture, Contact, and Actions -->
+        <aside class="profile-view__sidebar">
+            <div class="summary-card">
+                {% if employee.profile_pic %}
+                    <img src="{{ employee.profile_pic.url }}" alt="Profile picture" class="summary-card__image">
+                {% else %}
+                    {# It's good practice to have a default avatar. Make sure this path is correct. #}
+                    <img src="{% static 'images/default-avatar.jpg' %}" alt="Default profile picture" class="summary-card__image">
+                {% endif %}
+
+                <h1 class="summary-card__name">{{ employee.employee_name|default:"Unnamed Employee" }}</h1>
+
+                <div class="summary-card__actions">
+                    {% if employee.cv_file %}
+                        <a href="{{ employee.cv_file.url }}" class="btn btn--primary btn--full-width" target="_blank" rel="noopener">Download CV</a>
+                    {% else %}
+                        <span class="btn btn--disabled btn--full-width">No CV Uploaded</span>
+                    {% endif %}
+                </div>
+
+                <h3 class="summary-card__title">Contact Details</h3>
+                <ul class="summary-card__list">
+                    <li><span class="label">Email</span> <span class="value">{{ employee.email|default:"Not provided" }}</span></li>
+                    <li><span class="label">Phone</span> <span class="value">{{ employee.phone|default:"Not provided" }}</span></li>
+                    <li><span class="label">Location</span> <span class="value">{% if employee.state %}{{ employee.state.name }}{% if employee.township %}, {{ employee.township.name }}{% endif %}{% else %}Not provided{% endif %}</span></li>
+                    <li><span class="label">Salary Expectation</span> <span class="value salary">{{ employee.salary_expect|default:"Not specified" }} MMK</span></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content: Experience, Education, Skills -->
+        <main class="profile-view__main">
+            <!-- Experience -->
+            <div class="detail-card">
+                <h2 class="detail-card__title">Experience</h2>
+                {% if employee.experience %}
+                    <ul class="detail-list">
+                        {% for item in employee.experience %}<li>{{ item }}</li>{% endfor %}
+                    </ul>
+                {% else %}<p class="empty-state">No experience has been added.</p>{% endif %}
+            </div>
+
+            <!-- Education -->
+            <div class="detail-card">
+                <h2 class="detail-card__title">Education</h2>
+                {% if employee.education %}
+                    <ul class="detail-list">
+                        {% for item in employee.education %}<li>{{ item }}</li>{% endfor %}
+                    </ul>
+                {% else %}<p class="empty-state">No education has been added.</p>{% endif %}
+            </div>
+
+            <!-- Skills -->
+            <div class="detail-card">
+                <h2 class="detail-card__title">Skills</h2>
+                {% if employee.skills %}
+                    <div class="skills-list">
+                        {% for skill in employee.skills %}
+                            <span class="skill-badge">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}<p class="empty-state">No skills have been listed.</p>{% endif %}
+            </div>
+
+            <!-- Social Media -->
+            <div class="detail-card">
+                <h2 class="detail-card__title">Social & Web Links</h2>
+                {% if employee.social_media %}
+                    <ul class="summary-card__list">
+                        {% for name, url in employee.social_media.items %}
+                            <li>
+                                <span class="label">{{ name|capfirst }}</span>
+                                <span class="value">
+                                    {% if url %}
+                                        {% if url|slice:":4" == "http" %}
+                                            <a href="{{ url }}" target="_blank" rel="noopener">{{ url|truncatechars:35 }}</a>
+                                        {% else %}
+                                            <a href="https://{{ url }}" target="_blank" rel="noopener">{{ url|truncatechars:35 }}</a>
+                                        {% endif %}
+                                    {% else %} - {% endif %}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}<p class="empty-state">No social links have been provided.</p>{% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

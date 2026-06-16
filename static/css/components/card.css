@@ -1,0 +1,76 @@
+/* -------------------- */
+/* --- CARD STYLING --- */
+/* -------------------- */
+
+/* --- General Job Card --- */
+.card-job {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-job:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Card Content (Left side) --- */
+.card-job__info {
+    flex-grow: 1;
+}
+
+.card-job__title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.card-job__title:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.card-job__meta {
+    font-size: 0.95rem;
+    color: var(--text-light-color);
+}
+.card-job__meta span {
+    margin: 0 0.5rem;
+}
+
+/* --- Card Actions (Right side) --- */
+.card-job__actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-shrink: 0; /* Prevents buttons from shrinking */
+    margin-left: 1rem;
+}
+
+
+/* --- Button Modifiers --- */
+
+/* Secondary button style (for Edit) */
+.btn--secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+.btn--secondary:hover {
+    background-color: var(--background-color);
+    border-color: var(--text-light-color);
+}
+
+/* Danger button style (for Delete) */
+.btn--danger {
+    backgro

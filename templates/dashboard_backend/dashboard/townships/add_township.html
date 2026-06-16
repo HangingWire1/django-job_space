@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    {% include 'dashboard/sidebar.html' %}
+    <div class="col-md-9">
+        <h2>Add Townships to {{ state.name }}</h2>
+
+        <form method="POST" id="township-form-container">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div id="form-list">
+                {% for form in formset %}
+                <div class="row township-form mb-3 border p-3">
+                    <div class="col-md-10">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div id="empty-form" class="d-none">
+                <div class="row township-form mb-3 border p-3">
+                    <div class="col-md-10">
+                        {{ formset.empty_form.name.label_tag }}
+                        {{ formset.empty_form.name }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="button" class="btn btn-outline-primary" id="add-more">
+                    <i class="bi bi-plus-lg"></i> Add Another Row
+                </button>
+                <button type="submit" class="btn btn-success">Save All Townships</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const addMoreBtn = document.getElementById('add-more');
+    const totalNewForms = document.getElementById('id_townships-TOTAL_FORMS');
+    const formContainer = document.getElementById('form-list');
+    const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+
+    addMoreBtn.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+
+        // 1. Get the current count of forms
+        let currentFormCount = parseInt(totalNewForms.value);
+
+        // 2. Clone the blueprint and replace __prefix__ with the count
+        const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, currentFormCount);
+
+        // 3. Append to the list
+        formContainer.insertAdjacentHTML('beforeend', newFormHtml);
+
+        // 4. Update the management form count
+        totalNewForms.value = currentFormCount + 1;
+    });
+</script>
+{% endblock %}

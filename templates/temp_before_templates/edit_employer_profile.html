@@ -1,0 +1,46 @@
+<form method="post" enctype="multipart/form-data" id="employer-form" class="auth-form">
+    {% csrf_token %}
+
+    <!-- CARD 1: Company Information -->
+    <div class="form-card">
+        <div class="form-card__header"><h2>Company Information</h2></div>
+        <div class="form-card__body">
+            <div class="form-grid">
+                <div class="form-group"><label for="{{ form.company_name.id_for_label }}">Company Name</label>{{ form.company_name }}</div>
+                <div class="form-group">
+                    <label for="{{ form.company_logo.id_for_label }}">Company Logo</label>{{ form.company_logo }}
+                    {% if employer.company_logo.url %}<img src="{{ employer.company_logo.url }}" alt="Company Logo" class="profile-pic-preview">{% endif %}
+                </div>
+                <div class="form-group"><label for="{{ form.industry.id_for_label }}">Industry</label>{{ form.industry }}</div>
+                <div class="form-group"><label for="{{ form.no_of_employee.id_for_label }}">Number of Employees</label>{{ form.no_of_employee }}</div>
+                <div class="form-group"><label for="{{ form.founded_at.id_for_label }}">Founded In (Year)</label>{{ form.founded_at }}</div>
+                <div class="form-group"><label for="{{ form.contact_email.id_for_label }}">Public Contact Email</label>{{ form.contact_email }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARD 2: Location -->
+    <div class="form-card">
+        <div class="form-card__header"><h2>Location</h2></div>
+        <div class="form-card__body">
+            <div class="form-grid">
+                <div class="form-group"><label for="{{ location_form.state.id_for_label }}">State</label>{{ location_form.state }}</div>
+                <div class="form-group"><label for="{{ location_form.township.id_for_label }}">Township</label>{{ location_form.township }}</div>
+            </div>
+            <div class="form-group mt-3"><label for="{{ location_form.detail_address.id_for_label }}">Detailed Address</label>{{ location_form.detail_address }}</div>
+        </div>
+    </div>
+
+    <!-- CARD 3: About Company -->
+    <div class="form-card">
+        <div class="form-card__header"><h2>About Your Company</h2></div>
+        <div class="form-card__body">
+            <div class="form-group mb-4"><label for="{{ form.what_we_do.id_for_label }}">What We Do</label>{{ form.what_we_do }}</div>
+            <div class="form-group mb-4"><label for="{{ form.why_join_us.id_for_label }}">Why Join Us</label>{{ form.why_join_us }}</div>
+            <div class="form-group"><label for="{{ form.mission_vision.id_for_label }}">Mission & Vision</label>{{ form.mission_vision }}</div>
+        </div>
+    </div>
+
+    <!-- Final Save Button -->
+    <div class="text-end mt-4"><button type="submit" class="btn btn--primary btn--lg">Save Changes</button></div>
+</form>

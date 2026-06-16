@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    {# This new stylesheet is for general form styling to match the theme #}
+    <link rel="stylesheet" href="{% static 'css/components/form-general.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="row">
+<!--        left sidebar-->
+        {% include 'dashboard/sidebar.html' %}
+<!--        right side content-->
+        <div class="col-md-9">
+
+            <div class="container">
+
+                <div class="page-header">
+                        <h1 class="page-header__title">Edit Job</h1>
+                        <p class="page-header__subtitle">Update the job details below.</p>
+                </div>
+
+                <div class="form-container">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <div class="form-section">
+                            <h2 class="form-section__title">Basic Information</h2>
+
+                            <div class="form-group">
+                                <label for="{{ form.title.id_for_label }}" class="form-label required">Job Title</label>
+                                {{ form.title }}
+                                <div class="form-error">{{ form.title.errors }}</div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.salary.id_for_label }}" class="form-label">Salary</label>
+                                    {{ form.salary }}
+                                    <div class="form-error">{{ form.salary.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.job_type.id_for_label }}" class="form-label">Job Type</label>
+                                    {{ form.job_type }}
+                                    <div class="form-error">{{ form.job_type.errors }}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+                                {{ form.category }}
+                                <div class="form-error">{{ form.category.errors }}</div>
+                            </div>
+                        </div>
+
+                        <hr class="form-section-divider">
+
+                        <div class="form-section">
+                            <h2 class="form-section__title">Job Location</h2>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.state.id_for_label }}" class="form-label required">State</label>
+                                    {{ form.state }}
+                                    <div class="form-error">{{ form.state.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.township.id_for_label }}" class="form-label required">Township</label>
+                                    {{ form.township }}
+                                    <div class="form-error">{{ form.township.errors }}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.detail_address.id_for_label }}" class="form-label required">Detailed Address</label>
+                                {{ form.detail_address }}
+                                <div class="form-error">{{ form.detail_address.errors }}</div>
+                            </div>
+                        </div>
+
+                        <hr class="form-section-divider">
+
+                        <div class="form-section">
+                            <h2 class="form-section__title">Job Details</h2>
+                            <div class="form-group">
+                                <label for="{{ form.description.id_for_label }}" class="form-label required">Description</label>
+                                {{ form.description }}
+                                <div class="form-error">{{ form.description.errors }}</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.requirements.id_for_label }}" class="form-label required">Requirements</label>
+                                {{ form.requirements }}
+                                <div class="form-error">{{ form.requirements.errors }}</div>
+                            </div>
+                        </div>
+
+                        <hr class="form-section-divider">
+
+                        <div class="form-section">
+                            <h2 class="form-section__title">Contact Information</h2>
+                            <div class="form-group">
+                                <label for="{{ form.contact_email.id_for_label }}" class="form-label">Contact Email</label>
+                                {{ form.contact_email }}
+                                <div class="form-error">{{ form.contact_email.errors }}</div>
+                            </div>
+                        </div>
+
+                            <div class="form-actions form-actions--space-between">
+                                <a href="{% url 'jobs_list' %}" class="btn btn--secondary">Cancel</a>
+                                <button type="submit" class="btn btn--primary">Update Job</button>
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/dropdowns.js' %}"></script>
+    <script>
+        // Ensure the script runs after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDependentDropdown("id_state", "id_township", "{% url 'ajax_load_townships' %}");
+        });
+    </script>
+{% endblock scripts %}
+

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Apply for {{ job.title }}{% endblock %}
+
+{% block styles %}
+    {# Reusing the auth stylesheet for the main card and form look #}
+    <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+    {# A small, specific stylesheet for this page #}
+    <link rel="stylesheet" href="{% static 'css/pages/apply.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card apply-card">
+
+        <!-- Job Header -->
+        <header class="apply-header">
+            <h1 class="auth-card__title">Apply for: {{ job.title }}</h1>
+            <p class="apply-header__subtitle">at {{ job.employer.company_name }}</p>
+        </header>
+
+        <!-- Application Form -->
+        <form method="post" enctype="multipart/form-data" class="auth-form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- SECTION 1: Your Information -->
+            <h2 class="form-section-title">Your Information</h2>
+            <p class="form-section-subtitle">This information is pre-filled from your profile. Please confirm it's correct.</p>
+
+            <div class="form-group">
+                <label for="{{ form.employee_name.id_for_label }}">Full Name</label>
+                {{ form.employee_name }}
+                {% if form.employee_name.errors %}<div class="invalid-feedback">{{ form.employee_name.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Contact Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="invalid-feedback">{{ form.email.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">Phone Number (Optional)</label>
+                {{ form.phone }}
+                {% if form.phone.errors %}<div class="invalid-feedback">{{ form.phone.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- SECTION 2: Application Details -->
+            <h2 class="form-section-title">Application Details</h2>
+
+            <div class="form-group">
+                <label for="{{ form.cv_file.id_for_label }}">CV / Resume</label>
+                {% if form.instance.cv_file and form.instance.cv_file.url %}
+                    <div class="current-file-display">
+                        <a href="{{ form.instance.cv_file.url }}" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                            View Current CV
+                        </a>
+                    </div>
+                    <p class="form-text">Uploading a new file will replace your current one.</p>
+                {% endif %}
+                {{ form.cv_file }}
+                {% if form.cv_file.errors %}<div class="invalid-feedback">{{ form.cv_file.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.salary_expect.id_for_label }}">Salary Expectation (MMK)</label>
+                {{ form.salary_expect }}
+                <p class="form-text">{{ form.salary_expect.help_text }}</p>
+                {% if form.salary_expect.errors %}<div class="invalid-feedback">{{ form.salary_expect.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.cover_letter.id_for_label }}">Cover Letter (Optional)</label>
+                {{ form.cover_letter }}
+                 <p class="form-text">{{ form.cover_letter.help_text }}</p>
+                {% if form.cover_letter.errors %}<div class="invalid-feedback">{{ form.cover_letter.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <!-- SECTION 3: Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--full-width btn--lg">Submit Application</button>
+                <a href="{% url 'job_details' job_slug=job.slug %}" class="cancel-link">Cancel and return</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+

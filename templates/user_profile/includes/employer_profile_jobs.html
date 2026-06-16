@@ -1,0 +1,25 @@
+<div class="job-list">
+    {% for job in jobs %}
+    <div class="job-card">
+        <div class="job-card__info">
+            <h3 class="job-card__title">
+                <a href="{% url 'job_details' job.slug %}" class="stretched-link">{{ job.title }}</a>
+            </h3>
+            <div class="job-card__meta">
+                <span>{{ job.location.state.name }}</span>
+                <span class="separator">&bull;</span>
+                <span>Posted: {{ job.created_at|timesince }} ago</span>
+            </div>
+        </div>
+        <div class="job-card__details">
+            <div class="job-card__salary">{{ job.salary }} MMK</div>
+            <div class="job-card__type">{{ job.get_job_type_display }}</div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="card--empty">
+        <h3>No open positions at this time.</h3>
+        <p>{{ employer.company_name }} does not have any active job listings. Please check back later.</p>
+    </div>
+    {% endfor %}
+</div>

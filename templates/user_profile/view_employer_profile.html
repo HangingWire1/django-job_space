@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ employer.company_name|default:"Company Profile" }}{% endblock %}
+
+{% block styles %}
+    {# We are using the same stylesheet as the employee profile, which has been enhanced #}
+    <link rel="stylesheet" href="{% static 'css/pages/profile_view.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-view-layout--full">
+        <!-- Profile Header -->
+        <header class="profile-header">
+            <div class="profile-header__logo">
+                {% if employer.company_logo %}
+                    <img src="{{ employer.company_logo.url }}" alt="Company logo for {{ employer.company_name }}">
+                {% else %}
+                    <span>logo</span>
+<!--                {{ employer.company_name|slice:":1" }}-->
+                {% endif %}
+            </div>
+            <div class="profile-header__info">
+                <h1 class="profile-header__name">{{ employer.company_name|default:"Company Name" }}</h1>
+                <!-- Profile Tabs -->
+                <nav class="profile-tabs">
+                    <a href="{% url 'view_employer_profile' employer.id 'about' %}" class="profile-tab {% if category == 'about' %}is-active{% endif %}">About Us</a>
+                    <a href="{% url 'view_employer_profile' employer.id 'jobs' %}" class="profile-tab {% if category == 'jobs' %}is-active{% endif %}">Open Jobs ({{ jobs.count }})</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content (Tabs) -->
+        <main class="profile-view__main">
+            {% if category == "jobs" %}
+                {% include "user_profile/includes/employer_profile_jobs.html" %}
+            {% else %}
+                {% include "user_profile/includes/employer_profile_about.html" %}
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}

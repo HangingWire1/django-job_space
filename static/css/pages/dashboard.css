@@ -1,0 +1,155 @@
+/* --------------------------------- */
+/* --- DASHBOARD & APPLICANT MGT --- */
+/* --------------------------------- */
+
+/* --- Main Layout --- */
+.dashboard-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 0 2rem; /* Give some space on the sides */
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* --- Left Sidebar --- */
+.dashboard-sidebar {
+    flex: 0 0 260px; /* Fixed width, doesn't grow or shrink */
+    position: sticky;
+    top: 90px; /* Header height (70px) + 20px space */
+    height: calc(100vh - 110px); /* Adjust based on your header and footer */
+}
+
+.sidebar-menu__title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu__link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.25rem;
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--text-color);
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-menu__link:hover {
+    background-color: #e9ecef; /* A light gray for hover */
+}
+
+.sidebar-menu__link.is-active {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 600;
+}
+.sidebar-menu__link.is-active:hover {
+    background-color: var(--accent-hover);
+}
+.sidebar-menu__link i { /* For Bootstrap Icons */
+    font-size: 1.1rem;
+}
+
+/* --- Main Content Area --- */
+.dashboard-main {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.panel {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures header corners are sharp */
+}
+
+.panel__header {
+    background-color: #f8f9fa; /* A very light background */
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.panel__header h4 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--primary-color);
+}
+.panel__body {
+    padding: 1.5rem;
+}
+
+/* --- Data Table Styling --- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+.data-table th, .data-table td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+}
+.data-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: var(--text-light-color);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+.data-table tbody tr:hover {
+    background-color: var(--background-color);
+}
+.data-table a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+.data-table a:hover {
+    color: var(--accent-color);
+}
+
+/* --- Status Selector --- */
+.status-select {
+    min-width: 120px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+.status-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-light-color);
+}
+.empty-state i { /* For Bootstrap Icons */
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+.empty-state h5 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--text-color);
+}

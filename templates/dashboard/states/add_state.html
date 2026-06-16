@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/pages/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/form-general.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-layout">
+
+        <aside class="admin-sidebar-container">
+            {% include 'dashboard/sidebar.html' %}
+        </aside>
+
+        <main class="admin-main">
+            <header class="page-header">
+                <h2 class="page-header__title">Add Multiple New States</h2>
+                <p class="page-header__subtitle">Enter the names of the states you wish to add to the system.</p>
+            </header>
+
+            <div class="form-container">
+                <form method="POST" id="state-form-container">
+                    {% csrf_token %}
+                    {{ formset.management_form }}
+
+                    <div id="form-list">
+                        {% for form in formset %}
+                        <section class="form-section state-form-row" style="background-color: var(--background-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label required" for="{{ form.name.id_for_label }}">
+                                    State Name
+                                </label>
+                                {{ form.name }}
+
+                                {% if form.name.errors %}
+                                    <div class="form-error">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </section>
+                        {% endfor %}
+                    </div>
+
+                    <div id="empty-form" style="display: none;">
+                        <section class="form-section state-form-row" style="background-color: var(--background-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label required">State Name</label>
+                                {{ formset.empty_form.name }}
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="form-actions form-actions--space-between" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <button type="button" class="btn" id="add-more" style="border: 2px dashed var(--accent-color); color: var(--accent-color); background: transparent; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="bi bi-plus-circle"></i> Add Another State
+                        </button>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="{% url 'states' %}" class="btn" style="background-color: transparent; color: var(--text-light-color);">Cancel</a>
+                            <button type="submit" class="btn btn--primary">Save All States</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    const addMoreBtn = document.getElementById('add-more');
+    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+    const formContainer = document.getElementById('form-list');
+    const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+
+    addMoreBtn.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+
+        let currentCount = parseInt(totalForms.value);
+
+        // Replace the __prefix__ placeholder with the current index
+        const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, currentCount);
+
+        formContainer.insertAdjacentHTML('beforeend', newFormHtml);
+        totalForms.value = currentCount + 1;
+
+        // Smooth scroll to the new field
+        window.scrollTo({
+            top: addMoreBtn.offsetTop,
+            behavior: 'smooth'
+        });
+    });
+</script>
+{% endblock %}

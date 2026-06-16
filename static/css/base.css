@@ -1,0 +1,91 @@
+/* ------------------------- */
+/* --- CORE LAYOUT (BASE) --- */
+/* ------------------------- */
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* A container to keep content centered and spaced */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Header and Navbar Structure */
+.header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+}
+
+.navbar__links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 2rem;
+}
+
+.navbar__actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1; /* This makes the main content area grow to fill available space */
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+/* Footer Structure */
+.footer {
+    padding: 2rem 0;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer__links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* General Button Structure (no color) */
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-weight: 500;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease-in-out;
+}

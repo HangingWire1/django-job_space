@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Posts{% endblock title %}
+
+{% block styles %}
+    {{ block.super }}
+    {# New stylesheet for the job cards and list page #}
+    <link rel="stylesheet" href="{% static 'css/components/card.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="container">
+
+    <div class="page-header">
+        <h1 class="page-header__title">My Posts</h1>
+        <p class="page-header__subtitle">A list of all the jobs you have published.</p>
+    </div>
+
+<!--    {% if messages %}-->
+<!--      {% for message in messages %}-->
+<!--        <div class="alert alert-success">{{ message }}</div>-->
+<!--      {% endfor %}-->
+<!--    {% endif %}-->
+
+    {% for job in jobs %}
+        <div class="card-job">
+            <div class="card-job__info">
+                <a href="{% url 'job_details' job.slug %}" class="card-job__title">{{ job.title }}</a>
+                <div class="card-job__meta">
+                    {{ job.get_job_type_display }}<span>•</span>{{ job.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+
+            <div class="card-job__actions">
+                <a href="{% url 'edit_job' job.slug %}" class="btn btn--secondary btn--small">Edit</a>
+
+                <form action="{% url 'delete_job' job.slug %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn--danger btn--small"
+                        onclick="return confirm('Are you sure you want to delete this job post?')">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% empty %}
+        <div class="notice-empty">
+            You haven't posted any jobs yet.
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

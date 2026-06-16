@@ -1,0 +1,86 @@
+/* -------------------- */
+/* --- FORM COMPONENTS --- */
+/* -------------------- */
+
+/* --- Main Search Form Container --- */
+.search-form {
+    display: flex;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Ensures the button's corners don't stick out */
+}
+
+/* --- Wrapper for each field + icon --- */
+.search-form__field-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1 1 30%; /* Allows fields to grow and shrink */
+    border-right: 1px solid var(--border-color);
+}
+.search-form__field-group:first-child {
+    flex: 1 1 40%; /* Give more space to the keyword input */
+}
+.search-form__field-group:last-of-type {
+    border-right: none;
+}
+
+.search-form__icon {
+    position: absolute;
+    left: 1rem;
+    height: 20px;
+    width: 20px;
+    color: var(--text-light-color);
+    pointer-events: none; /* Icon doesn't block clicks on the input */
+}
+
+/* --- Input and Select Fields --- */
+.search-form__input {
+    width: 100%;
+    height: 56px;
+    padding: 0 1rem 0 3rem; /* Left padding to make space for the icon */
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-color);
+    -webkit-appearance: none; /* Removes default select styling */
+    -moz-appearance: none;
+    appearance: none;
+}
+.search-form__input:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
+/* Custom arrow for select dropdowns */
+.search-form__field-group select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" fill-rule="evenodd"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25em;
+    padding-right: 3rem;
+}
+
+/* --- Search Button --- */
+.search-form__button {
+    height: 58px; /* Slightly taller to overlap border */
+    padding: 0 2rem;
+    border: none;
+    border-radius: 0;
+    background-color: var(--accent-color);
+    color: white;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.search-form__button:hover {
+    background-color: var(--accent-hover);
+}

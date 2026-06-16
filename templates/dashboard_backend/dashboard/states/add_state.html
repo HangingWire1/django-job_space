@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    {% include 'dashboard/sidebar.html' %}
+    <div class="col-md-9">
+        <h2>Add Multiple New States</h2>
+
+        <form method="POST" id="state-form-container">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div id="form-list">
+                {% for form in formset %}
+                <div class="state-form mb-3 p-3 border rounded shadow-sm">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div id="empty-form" class="d-none">
+                <div class="state-form mb-3 p-3 border rounded shadow-sm">
+                    {{ formset.empty_form.name.label_tag }}
+                    {{ formset.empty_form.name }}
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="button" class="btn btn-outline-primary" id="add-more">
+                    + Add Another State
+                </button>
+                <button type="submit" class="btn btn-warning">Save All States</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const addMoreBtn = document.getElementById('add-more');
+    const totalForms = document.getElementById('id_form-TOTAL_FORMS'); // Note: prefix is 'form'
+    const formContainer = document.getElementById('form-list');
+    const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+
+    addMoreBtn.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+
+        let currentCount = parseInt(totalForms.value);
+        // Replace the __prefix__ placeholder with the current index
+        const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, currentCount);
+
+        formContainer.insertAdjacentHTML('beforeend', newFormHtml);
+        totalForms.value = currentCount + 1;
+    });
+</script>
+{% endblock %}
